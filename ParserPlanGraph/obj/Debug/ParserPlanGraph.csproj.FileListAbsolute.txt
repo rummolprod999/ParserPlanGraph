@@ -1,0 +1,12 @@
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Debug/ParserPlanGraph.csprojResolveAssemblyReference.cache
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Debug/ParserPlanGraph.csproj.CoreCompileInputs.cache
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/ParserPlanGraph.exe.config
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/ParserPlanGraph.exe
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/ParserPlanGraph.pdb
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/FluentFTP.dll
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/MySql.Data.dll
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/Newtonsoft.Json.dll
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/FluentFTP.xml
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/Newtonsoft.Json.xml
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Debug/ParserPlanGraph.exe
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Debug/ParserPlanGraph.pdb

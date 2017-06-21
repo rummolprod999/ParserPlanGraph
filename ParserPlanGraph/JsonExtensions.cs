@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ParserPlanGraph
 {
-    public class JsonExtensions
+    public static class JsonExtensions
     {
         public static bool IsNullOrEmpty(this JToken token)
         {

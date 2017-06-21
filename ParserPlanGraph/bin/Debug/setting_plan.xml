@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <setting>
 	<database>tenders_test</database>
-	<tempdir_plan>temp_tenders44</tempdir_plan>
-	<logdir_plan>log_tenders44</logdir_plan>
+	<tempdir_plan44>temp_plan44</tempdir_plan44>
+	<logdir_plan44>log_plan44</logdir_plan44>
 	<prefix></prefix>
 	<userdb>root</userdb>
 	<passdb>1234</passdb>
