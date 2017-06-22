@@ -106,5 +106,12 @@ namespace ParserPlanGraph
 
             return arch;
         }
+        public WorkWithFtp ClientFtp44_old()
+        {
+            WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
+            return ftpCl;
+        }
+
+        
     }
 }
