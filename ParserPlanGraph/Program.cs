@@ -67,7 +67,7 @@ namespace ParserPlanGraph
                     break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44, prev223, daily223 ");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44");
                     break;
             }
         }
@@ -111,13 +111,20 @@ namespace ParserPlanGraph
                 Directory.CreateDirectory(LogPath);
             }
             if (arg == TypeArguments.Curr44 || arg == TypeArguments.Last44 || arg == TypeArguments.Prev44)
-                FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Tenders44_{LocalDate:dd_MM_yyyy}.log";
+                FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Plan44_{LocalDate:dd_MM_yyyy}.log";
         }
 
         private static void ParserPlan44(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Plan44");
+            /*ParserPlan44 p44 = new ParserPlan44(Periodparsing);
+            p44.Parsing();*/
+            ParserPlan44 p44 = new ParserPlan44(Periodparsing);
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/tenderPlan2017_2016017330000410020002_688.xml");
+            p44.ParsingXML(f, "moskow", 50, TypeFile44.Plan);
             Log.Logger("Добавили Plan44", AddPlan44);
+            Log.Logger("Добавили PlanCancel44", AddPlanCancel44);
+            Log.Logger("Добавили PlanChange44", AddPlanChange44);
             Log.Logger("Время окончания парсинга Plan44");
             
         }
