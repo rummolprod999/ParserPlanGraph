@@ -63,6 +63,53 @@ namespace ParserPlanGraph
                         return;
                     }
                     reader.Close();
+                    string purchasePlanNumber = ((string) plan.SelectToken("commonInfo.purchasePlanNumber") ?? "").Trim();
+                    string year = ((string) plan.SelectToken("commonInfo.year") ?? "").Trim();
+                    string createDate = (JsonConvert.SerializeObject(plan.SelectToken("commonInfo.createDate") ?? "") ??
+                                         "").Trim('"');
+                    string confirmDate = (JsonConvert.SerializeObject(plan.SelectToken("commonInfo.confirmDate") ?? "") ??
+                                         "").Trim('"');
+                    string publishDate = (JsonConvert.SerializeObject(plan.SelectToken("commonInfo.publishDate") ?? "") ??
+                                          "").Trim('"');
+                    string printform = ((string) plan.SelectToken("printForm.url") ?? "").Trim();
+                    int cancel_status = 0;
+                    if (!String.IsNullOrEmpty(publishDate))
+                    {
+                        string select_date_p =
+                            $"SELECT id, publish_date FROM {Program.Prefix}tender_plan WHERE id_region = @id_region AND plan_number = @plan_number";
+                        MySqlCommand cmd2 = new MySqlCommand(select_date_p, connect);
+                        cmd2.Prepare();
+                        cmd2.Parameters.AddWithValue("@id_region", region_id);
+                        cmd2.Parameters.AddWithValue("@plan_number", planNumber);
+                        DataTable dt = new DataTable();
+                        MySqlDataAdapter adapter = new MySqlDataAdapter {SelectCommand = cmd2};
+                        adapter.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                        {
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                DateTime date_new = DateTime.Parse(publishDate);
+                                DateTime date_old = (DateTime) row["publish_date"];
+                                if (date_new > date_old)
+                                {
+                                    string update_plan_cancel =
+                                        $"UPDATE {Program.Prefix}tender_plan SET cancel = 1 WHERE id = @id";
+                                    MySqlCommand cmd3 = new MySqlCommand(update_plan_cancel, connect);
+                                    cmd3.Prepare();
+                                    cmd3.Parameters.AddWithValue("id", (int) row["id"]);
+                                    cmd3.ExecuteNonQuery();
+                                }
+                                else
+                                {
+                                    cancel_status = 1;
+                                }
+                            }
+                        }
+                    }
+                    int id_customer = 0;
+                    int id_owner = 0;
+                    
+
                 }
             }
             else
