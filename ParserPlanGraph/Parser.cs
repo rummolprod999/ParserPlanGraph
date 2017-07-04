@@ -82,7 +82,7 @@ namespace ParserPlanGraph
             return client;
         }
 
-        public virtual void Bolter(FileInfo f, string region, int region_id)
+        public virtual void Bolter(FileInfo f, string region, int region_id, TypeFile44 typefile)
         {
         }
 

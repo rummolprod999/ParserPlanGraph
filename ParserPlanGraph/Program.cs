@@ -32,6 +32,8 @@ namespace ParserPlanGraph
         public static string TempPath => _tempPath44;
         public static string LogPath => _logPath44;
         public static int AddPlan44 = 0;
+        public static int AddPlanCancel44 = 0;
+        public static int AddPlanChange44 = 0;
 
         public static void Main(string[] args)
         {

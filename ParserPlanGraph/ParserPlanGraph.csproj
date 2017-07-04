@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClearText.cs" />
     <Compile Include="ConnectToDb.cs" />
     <Compile Include="GetSettings.cs" />
     <Compile Include="IParser.cs" />
@@ -62,9 +63,14 @@
     <Compile Include="Log.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserPlan44.cs" />
+    <Compile Include="Plan.cs" />
+    <Compile Include="PlanType44.cs" />
+    <Compile Include="PlanTypeCancel44.cs" />
+    <Compile Include="PlanTypeChange44.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeArguments.cs" />
+    <Compile Include="TypeFile44.cs" />
     <Compile Include="Unzipped.cs" />
     <Compile Include="WorkWithFtp.cs" />
   </ItemGroup>
