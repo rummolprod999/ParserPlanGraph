@@ -42,6 +42,7 @@ namespace ParserPlanGraph
                     return;
                 }
                 string planNumber = ((string) plan.SelectToken("planNumber") ?? "").Trim();
+                string versionNumber = ((string) plan.SelectToken("versionNumber") ?? "").Trim();
                 if (String.IsNullOrEmpty(planNumber))
                 {
                     Log.Logger("У плана нет planNumber", file_path);
@@ -217,15 +218,78 @@ namespace ParserPlanGraph
                             cmd7.Parameters.AddWithValue("@contact_name", owner_contact_name);
                             cmd7.ExecuteNonQuery();
                             id_owner = (int) cmd7.LastInsertedId;
-
                         }
                     }
                     else
                     {
                         Log.Logger("Нет owner_reg_num", file_path);
                     }
-                    Console.WriteLine(id_customer);
-                    Console.WriteLine(id_owner);
+                    string sum_pushases_small_business_total =
+                        ((string) plan.SelectToken("totals.outcomeIndicators.sumPushasesSmallBusiness.total") ?? "")
+                        .Trim();
+                    string sum_pushases_small_business_current_year =
+                        ((string) plan.SelectToken("totals.outcomeIndicators.sumPushasesSmallBusiness.currentYear") ??
+                         "")
+                        .Trim();
+                    string sum_pushases_request_total =
+                        ((string) plan.SelectToken("totals.outcomeIndicators.sumPushasesRequest.total") ?? "")
+                        .Trim();
+                    string sum_pushases_request_current_year =
+                        ((string) plan.SelectToken("totals.outcomeIndicators.sumPushasesRequest.currentYear") ?? "")
+                        .Trim();
+                    string finance_support_total =
+                        ((string) plan.SelectToken("totals.financeSupport.financeSupportTotal.total") ?? "")
+                        .Trim();
+                    string finance_support_current_year =
+                        ((string) plan.SelectToken("totals.financeSupport.financeSupportTotal.currentYear") ?? "")
+                        .Trim();
+                    string insert_plan =
+                        $"INSERT INTO {Program.Prefix}tender_plan SET id_xml = @id_xml, plan_number = @plan_number, num_version = @num_version, id_region = @id_region, purchase_plan_number = @purchase_plan_number, year = @year, create_date = @create_date, confirm_date = @confirm_date, publish_date = @publish_date, id_customer = @id_customer, id_owner = @id_owner, print_form = @print_form, cancel = @cancel, sum_pushases_small_business_total = @sum_pushases_small_business_total, sum_pushases_small_business_current_year = @sum_pushases_small_business_current_year, sum_pushases_request_total = @sum_pushases_request_total, sum_pushases_request_current_year = @sum_pushases_request_current_year, finance_support_total = @finance_support_total, finance_support_current_year = @finance_support_current_year";
+                    MySqlCommand cmd8 = new MySqlCommand(insert_plan, connect);
+                    cmd8.Prepare();
+                    cmd8.Parameters.AddWithValue("@id_xml", id_xml);
+                    cmd8.Parameters.AddWithValue("@plan_number", planNumber);
+                    cmd8.Parameters.AddWithValue("@num_version", versionNumber);
+                    cmd8.Parameters.AddWithValue("@id_region", region_id);
+                    cmd8.Parameters.AddWithValue("@purchase_plan_number", purchasePlanNumber);
+                    cmd8.Parameters.AddWithValue("@year", year);
+                    cmd8.Parameters.AddWithValue("@create_date", createDate);
+                    cmd8.Parameters.AddWithValue("@confirm_date", confirmDate);
+                    cmd8.Parameters.AddWithValue("@publish_date", publishDate);
+                    cmd8.Parameters.AddWithValue("@id_customer", id_customer);
+                    cmd8.Parameters.AddWithValue("@id_owner", id_owner);
+                    cmd8.Parameters.AddWithValue("@print_form", printform);
+                    cmd8.Parameters.AddWithValue("@cancel", cancel_status);
+                    cmd8.Parameters.AddWithValue("@sum_pushases_small_business_total",
+                        sum_pushases_small_business_total);
+                    cmd8.Parameters.AddWithValue("@sum_pushases_small_business_current_year",
+                        sum_pushases_small_business_current_year);
+                    cmd8.Parameters.AddWithValue("@sum_pushases_request_total", sum_pushases_request_total);
+                    cmd8.Parameters.AddWithValue("@sum_pushases_request_current_year",
+                        sum_pushases_request_current_year);
+                    cmd8.Parameters.AddWithValue("@finance_support_total", finance_support_total);
+                    cmd8.Parameters.AddWithValue("@finance_support_current_year", finance_support_current_year);
+                    int res_plan = cmd8.ExecuteNonQuery();
+                    int id_plan = (int) cmd8.LastInsertedId;
+                    AddPlan44?.Invoke(res_plan);
+                    List<JToken> positions = GetElements(plan, "positions.position");
+                    foreach (var pos in positions)
+                    {
+                        string position_number = ((string) pos.SelectToken("commonInfo.positionNumber") ?? "")
+                            .Trim();
+                        string purchase_plan_position_number =
+                            ((string) pos.SelectToken("commonInfo.purchasePlanPositionInfo.positionNumber") ?? "")
+                            .Trim();
+                        string purchase_object_name =
+                            ((string) pos.SelectToken("commonInfo.positionInfo.purchaseObjectName") ?? "")
+                            .Trim();
+                        string start_month =
+                            ((string) pos.SelectToken("commonInfo.positionInfo.placingNotificationTerm.month") ?? "")
+                            .Trim();
+                        string end_month =
+                            ((string) pos.SelectToken("commonInfo.positionInfo.endContratProcedureTerm.month") ?? "")
+                            .Trim();
+                    }
                 }
             }
             else
