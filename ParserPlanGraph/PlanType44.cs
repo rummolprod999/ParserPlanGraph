@@ -289,6 +289,60 @@ namespace ParserPlanGraph
                         string end_month =
                             ((string) pos.SelectToken("commonInfo.positionInfo.endContratProcedureTerm.month") ?? "")
                             .Trim();
+                        int id_placing_way = 0;
+                        string placingWay_code =
+                            ((string) pos.SelectToken("commonInfo.placingWayInfo.placingWay.code") ?? "").Trim();
+                        string placingWay_name =
+                            ((string) pos.SelectToken("commonInfo.placingWayInfo.placingWay.name") ?? "").Trim();
+                        if (!String.IsNullOrEmpty(placingWay_code))
+                        {
+                            string select_placing_way =
+                                $"SELECT id_placing_way FROM placing_way WHERE code = @code";
+                            MySqlCommand cmd9 = new MySqlCommand(select_placing_way, connect);
+                            cmd9.Prepare();
+                            cmd9.Parameters.AddWithValue("@code", placingWay_code);
+                            MySqlDataReader reader4 = cmd9.ExecuteReader();
+                            if (reader4.HasRows)
+                            {
+                                reader4.Read();
+                                id_placing_way = reader4.GetInt32("id_placing_way");
+                                reader4.Close();
+                            }
+                            else
+                            {
+                                reader4.Close();
+                                string insert_placing_way =
+                                    $"INSERT INTO placing_way SET code= @code, name= @name";
+                                MySqlCommand cmd10 = new MySqlCommand(insert_placing_way, connect);
+                                cmd10.Prepare();
+                                cmd10.Parameters.AddWithValue("@code", placingWay_code);
+                                cmd10.Parameters.AddWithValue("@name", placingWay_name);
+                                cmd10.ExecuteNonQuery();
+                                id_placing_way = (int) cmd10.LastInsertedId;
+                                Log.Logger("Добавлен новый placing_way", file_path, id_placing_way);
+                            }
+                        }
+                        string finance_total =
+                            ((string) pos.SelectToken("commonInfo.financeInfo.planPayments.total") ?? "").Trim();
+                        string finance_total_current_year =
+                            ((string) pos.SelectToken("commonInfo.financeInfo.planPayments.currentYear") ?? "").Trim();
+                        string max_price = ((string) pos.SelectToken("commonInfo.financeInfo.maxPrice") ?? "").Trim();
+                        string OKPD2_code = ((string) pos.SelectToken("purchaseObjectInfo.OKPD2Info.OKPD2.code") ?? "").Trim();
+                        string OKPD2_name = ((string) pos.SelectToken("purchaseObjectInfo.OKPD2Info.OKPD2.name") ?? "").Trim();
+                        string OKEI_code = ((string) pos.SelectToken("purchaseObjectInfo.OKEI.code") ?? "").Trim();
+                        string OKEI_name = ((string) pos.SelectToken("purchaseObjectInfo.OKEI.name") ?? "").Trim();
+                        string pos_description = ((string) pos.SelectToken("purchaseObjectInfo.objectDescription") ?? "").Trim();
+                        string products_quantity_total = ((string) pos.SelectToken("purchaseObjectInfo.productsQuantityInfo.total") ?? "").Trim();
+                        string products_quantity_current_year = ((string) pos.SelectToken("purchaseObjectInfo.productsQuantityInfo.currentYear") ?? "").Trim();
+                        string purchase_fin_condition = ((string) pos.SelectToken("purchaseConditions.purchaseFinCondition.amount") ?? "").Trim();
+                        string contract_fin_condition = ((string) pos.SelectToken("purchaseConditions.contractFinCondition.amount") ?? "").Trim();
+                        string advance_fin_condition = ((string) pos.SelectToken("purchaseConditions.advanceFinCondition.amount") ?? "").Trim();
+                        string purchase_graph = ((string) pos.SelectToken("purchaseConditions.purchaseGraph.plannedPeriod") ?? "").Trim();
+                        if (String.IsNullOrEmpty(purchase_graph))
+                        {
+                            purchase_graph = ((string) pos.SelectToken("purchaseConditions.purchaseGraph.periodicity.otherPeriodicityText") ?? "").Trim();
+                        }
+                        string bank_support_info = 
                     }
                 }
             }
