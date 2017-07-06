@@ -244,7 +244,7 @@ namespace ParserPlanGraph
                         ((string) plan.SelectToken("totals.financeSupport.financeSupportTotal.currentYear") ?? "")
                         .Trim();
                     string insert_plan =
-                        $"INSERT INTO {Program.Prefix}tender_plan SET id_xml = @id_xml, plan_number = @plan_number, num_version = @num_version, id_region = @id_region, purchase_plan_number = @purchase_plan_number, year = @year, create_date = @create_date, confirm_date = @confirm_date, publish_date = @publish_date, id_customer = @id_customer, id_owner = @id_owner, print_form = @print_form, cancel = @cancel, sum_pushases_small_business_total = @sum_pushases_small_business_total, sum_pushases_small_business_current_year = @sum_pushases_small_business_current_year, sum_pushases_request_total = @sum_pushases_request_total, sum_pushases_request_current_year = @sum_pushases_request_current_year, finance_support_total = @finance_support_total, finance_support_current_year = @finance_support_current_year";
+                        $"INSERT INTO {Program.Prefix}tender_plan SET id_xml = @id_xml, plan_number = @plan_number, num_version = @num_version, id_region = @id_region, purchase_plan_number = @purchase_plan_number, year = @year, create_date = @create_date, confirm_date = @confirm_date, publish_date = @publish_date, id_customer = @id_customer, id_owner = @id_owner, print_form = @print_form, cancel = @cancel, sum_pushases_small_business_total = @sum_pushases_small_business_total, sum_pushases_small_business_current_year = @sum_pushases_small_business_current_year, sum_pushases_request_total = @sum_pushases_request_total, sum_pushases_request_current_year = @sum_pushases_request_current_year, finance_support_total = @finance_support_total, finance_support_current_year = @finance_support_current_year, xml = @xml";
                     MySqlCommand cmd8 = new MySqlCommand(insert_plan, connect);
                     cmd8.Prepare();
                     cmd8.Parameters.AddWithValue("@id_xml", id_xml);
@@ -269,6 +269,7 @@ namespace ParserPlanGraph
                         sum_pushases_request_current_year);
                     cmd8.Parameters.AddWithValue("@finance_support_total", finance_support_total);
                     cmd8.Parameters.AddWithValue("@finance_support_current_year", finance_support_current_year);
+                    cmd8.Parameters.AddWithValue("@xml", xml);
                     int res_plan = cmd8.ExecuteNonQuery();
                     int id_plan = (int) cmd8.LastInsertedId;
                     AddPlan44?.Invoke(res_plan);
@@ -340,10 +341,76 @@ namespace ParserPlanGraph
                         string purchase_graph = ((string) pos.SelectToken("purchaseConditions.purchaseGraph.plannedPeriod") ?? "").Trim();
                         if (String.IsNullOrEmpty(purchase_graph))
                         {
+                            purchase_graph = ((string) pos.SelectToken("purchaseConditions.purchaseGraph.periodicity.periodicityType") ?? "").Trim();
+                        }
+                        if (String.IsNullOrEmpty(purchase_graph))
+                        {
                             purchase_graph = ((string) pos.SelectToken("purchaseConditions.purchaseGraph.periodicity.otherPeriodicityText") ?? "").Trim();
                         }
-                        string bank_support_info = 
+                        string bank_support_info = ((string) pos.SelectToken("purchaseConditions.bankSupportInfo.bankSupportText") ?? "").Trim();
+
+                        string insert_position = $"INSERT INTO {Program.Prefix}tender_plan_position SET id_plan = @id_plan, position_number = @position_number, purchase_plan_position_number = @purchase_plan_position_number, purchase_object_name = @purchase_object_name, start_month = @start_month, end_month = @end_month, id_placing_way = @id_placing_way, finance_total = @finance_total, finance_total_current_year = @finance_total_current_year, max_price = @max_price, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, OKEI_code = @OKEI_code, OKEI_name = @OKEI_name, pos_description = @pos_description, products_quantity_total = @products_quantity_total, products_quantity_current_year = @products_quantity_current_year, purchase_fin_condition = @purchase_fin_condition, contract_fin_condition = @contract_fin_condition, advance_fin_condition = @advance_fin_condition, purchase_graph = @purchase_graph, bank_support_info = @bank_support_info";
+                        MySqlCommand cmd11 = new MySqlCommand(insert_position, connect);
+                        cmd11.Prepare();
+                        cmd11.Parameters.AddWithValue("@id_plan", id_plan);
+                        cmd11.Parameters.AddWithValue("@position_number", position_number);
+                        cmd11.Parameters.AddWithValue("@purchase_plan_position_number", purchase_plan_position_number);
+                        cmd11.Parameters.AddWithValue("@purchase_object_name", purchase_object_name);
+                        cmd11.Parameters.AddWithValue("@start_month", start_month);
+                        cmd11.Parameters.AddWithValue("@end_month", end_month);
+                        cmd11.Parameters.AddWithValue("@id_placing_way", id_placing_way);
+                        cmd11.Parameters.AddWithValue("@finance_total", finance_total);
+                        cmd11.Parameters.AddWithValue("@finance_total_current_year", finance_total_current_year);
+                        cmd11.Parameters.AddWithValue("@max_price", max_price);
+                        cmd11.Parameters.AddWithValue("@OKPD2_code", OKPD2_code);
+                        cmd11.Parameters.AddWithValue("@OKPD2_name", OKPD2_name);
+                        cmd11.Parameters.AddWithValue("@OKEI_code", OKEI_code);
+                        cmd11.Parameters.AddWithValue("@OKEI_name", OKEI_name);
+                        cmd11.Parameters.AddWithValue("@pos_description", pos_description);
+                        cmd11.Parameters.AddWithValue("@products_quantity_total", products_quantity_total);
+                        cmd11.Parameters.AddWithValue("@products_quantity_current_year", products_quantity_current_year);
+                        cmd11.Parameters.AddWithValue("@purchase_fin_condition", purchase_fin_condition);
+                        cmd11.Parameters.AddWithValue("@contract_fin_condition", contract_fin_condition);
+                        cmd11.Parameters.AddWithValue("@advance_fin_condition", advance_fin_condition);
+                        cmd11.Parameters.AddWithValue("@purchase_graph", purchase_graph);
+                        cmd11.Parameters.AddWithValue("@bank_support_info", bank_support_info);
+                        cmd11.ExecuteNonQuery();
+                        int id_prod = (int) cmd11.LastInsertedId;
+                        List<JToken> rec_pref = GetElements(pos, "purchaseConditions.preferensesRequirements.preferenseRequirement");
+                        foreach (var pr in rec_pref)
+                        {
+                            string group_code = ((string) pr.SelectToken("prefsReqsGroup.code") ?? "").Trim();
+                            string group_name = ((string) pr.SelectToken("prefsReqsGroup.name") ?? "").Trim();
+                            string name = ((string) pr.SelectToken("name") ?? "").Trim();
+                            string add_info = ((string) pr.SelectToken("addInfo") ?? "").Trim();
+                            string insert_pref_rec = $"INSERT INTO {Program.Prefix}tender_plan_pref_rec SET id_plan_prod = @id_plan_prod, group_code = @group_code, group_name = @group_name, name = @name, add_info = @add_info";
+                            MySqlCommand cmd12 = new MySqlCommand(insert_pref_rec, connect);
+                            cmd12.Prepare();
+                            cmd12.Parameters.AddWithValue("@id_plan_prod", id_prod);
+                            cmd12.Parameters.AddWithValue("@group_code", group_code);
+                            cmd12.Parameters.AddWithValue("@group_name", group_name);
+                            cmd12.Parameters.AddWithValue("@name", name);
+                            cmd12.Parameters.AddWithValue("@add_info", add_info);
+                            cmd12.ExecuteNonQuery();
+                        }
+
                     }
+                    List<JToken> attach = GetElements(plan, "attachments.attachment");
+                    foreach (var att in attach)
+                    {
+                        string file_name = ((string) att.SelectToken("fileName") ?? "").Trim();
+                        string desc = ((string) att.SelectToken("docDescription") ?? "").Trim();
+                        string url = ((string) att.SelectToken("url") ?? "").Trim();
+                        string insert_attach = $"INSERT INTO {Program.Prefix}tender_plan_attach SET id_plan = @id_plan, file_name = @file_name, description = @description, url = @url";
+                        MySqlCommand cmd13 = new MySqlCommand(insert_attach, connect);
+                        cmd13.Prepare();
+                        cmd13.Parameters.AddWithValue("@id_plan", id_plan);
+                        cmd13.Parameters.AddWithValue("@file_name", file_name);
+                        cmd13.Parameters.AddWithValue("@description", desc);
+                        cmd13.Parameters.AddWithValue("@url", url);
+                        cmd13.ExecuteNonQuery();
+                    }
+                    
                 }
             }
             else

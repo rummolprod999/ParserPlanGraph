@@ -24,5 +24,11 @@ namespace ParserPlanGraph
                     Log.Logger("Не удалось добавить PlanCancel44", file_path);
             };
         }
+
+        public override void Parsing()
+        {
+            string xml = GetXml(file.ToString());
+            Log.Logger("План cancel", file_path, xml);
+        }
     }
 }

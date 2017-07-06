@@ -16,9 +16,9 @@ namespace ParserPlanGraph
     public class ParserPlan44 : Parser
     {
         protected DataTable DtRegion;
-        private string[] tender_plan = new[] {"tenderPlan2017"};
-        private string[] tender_plan_cancel = new[] {"tenderPlanCancel"};
-        private string[] tender_plan_change = new[] {"tenderPlanChange"};
+        private string[] tender_plan = new[] {"tenderplan2017"};
+        private string[] tender_plan_cancel = new[] {"tenderplancancel"};
+        private string[] tender_plan_change = new[] {"tenderplanchange"};
 
         public ParserPlan44(TypeArguments arg) : base(arg)
         {
@@ -166,7 +166,7 @@ namespace ParserPlanGraph
                 Log.Logger("Не могу найти директорию", PathParse);
             }
 
-            return archtemp;
+            return archtemp.Where(a => a.ToLower().IndexOf("tenderplan", StringComparison.Ordinal) != -1).ToList();
         }
 
         public override List<String> GetListArchCurr(string PathParse, string RegionPath)
