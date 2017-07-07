@@ -52,12 +52,13 @@ namespace ParserPlanGraph
                 {
                     connect.Open();
                     string select_plan =
-                        $"SELECT id FROM {Program.Prefix}tender_plan WHERE id_xml = @id_xml AND id_region = @id_region AND plan_number = @plan_number";
+                        $"SELECT id FROM {Program.Prefix}tender_plan WHERE id_xml = @id_xml AND id_region = @id_region AND plan_number = @plan_number AND num_version = @num_version";
                     MySqlCommand cmd = new MySqlCommand(select_plan, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@id_xml", id_xml);
                     cmd.Parameters.AddWithValue("@id_region", region_id);
                     cmd.Parameters.AddWithValue("@plan_number", planNumber);
+                    cmd.Parameters.AddWithValue("@num_version", versionNumber);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
@@ -94,8 +95,8 @@ namespace ParserPlanGraph
                         {
                             foreach (DataRow row in dt.Rows)
                             {
-                                DateTime date_new = DateTime.Parse(publishDate);
-                                DateTime date_old = (DateTime) row["publish_date"];
+                                DateTime date_new = DateTime.Parse(createDate);
+                                DateTime date_old = (DateTime) row["create_date"];
                                 if (date_new > date_old)
                                 {
                                     string update_plan_cancel =
