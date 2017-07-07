@@ -83,7 +83,7 @@ namespace ParserPlanGraph
                     if (!String.IsNullOrEmpty(publishDate))
                     {
                         string select_date_p =
-                            $"SELECT id, publish_date FROM {Program.Prefix}tender_plan WHERE id_region = @id_region AND plan_number = @plan_number";
+                            $"SELECT id, create_date FROM {Program.Prefix}tender_plan WHERE id_region = @id_region AND plan_number = @plan_number";
                         MySqlCommand cmd2 = new MySqlCommand(select_date_p, connect);
                         cmd2.Prepare();
                         cmd2.Parameters.AddWithValue("@id_region", region_id);
