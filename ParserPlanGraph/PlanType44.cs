@@ -62,8 +62,8 @@ namespace ParserPlanGraph
                     if (reader.HasRows)
                     {
                         reader.Close();
-                        Log.Logger("Такой план уже есть в базе", file_path);
-                        return;
+                        Log.Logger("Такой план уже есть в базе", file_path, id_xml, planNumber);
+                        //return;
                     }
                     reader.Close();
                     string purchasePlanNumber =
