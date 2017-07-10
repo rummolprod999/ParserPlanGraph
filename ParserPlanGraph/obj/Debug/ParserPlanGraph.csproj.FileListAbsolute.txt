@@ -10,3 +10,5 @@
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/Newtonsoft.Json.xml
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Debug/ParserPlanGraph.exe
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Debug/ParserPlanGraph.pdb
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/Ftp.dll
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Debug/Ftp.xml

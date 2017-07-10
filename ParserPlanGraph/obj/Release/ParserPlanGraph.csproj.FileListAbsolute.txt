@@ -10,3 +10,5 @@
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.csproj.CoreCompileInputs.cache
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.exe
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.pdb
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Ftp.dll
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Ftp.xml

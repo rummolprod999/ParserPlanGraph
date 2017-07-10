@@ -91,7 +91,7 @@ namespace ParserPlanGraph
                         {
                             Bolter(f, region, region_id, TypeFile44.Plan);
                         }
-                        
+
                         foreach (var f in arrayTenderPlanCancel)
                         {
                             Bolter(f, region, region_id, TypeFile44.PlanCancel);
@@ -105,7 +105,7 @@ namespace ParserPlanGraph
                 }
             }
         }
-        
+
         public override void Bolter(FileInfo f, string region, int region_id, TypeFile44 typefile)
         {
             if (!f.Name.ToLower().EndsWith(".xml", StringComparison.Ordinal))

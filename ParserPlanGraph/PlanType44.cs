@@ -167,7 +167,7 @@ namespace ParserPlanGraph
                     }
                     else
                     {
-                        Log.Logger("Нет customer_reg_num", file_path);
+                        //Log.Logger("Нет customer_reg_num", file_path);
                     }
                     string owner_reg_num = ((string) plan.SelectToken("commonInfo.ownerInfo.regNum") ?? "").Trim();
                     if (!String.IsNullOrEmpty(owner_reg_num))
@@ -223,7 +223,7 @@ namespace ParserPlanGraph
                     }
                     else
                     {
-                        Log.Logger("Нет owner_reg_num", file_path);
+                        //Log.Logger("Нет owner_reg_num", file_path);
                     }
                     string sum_pushases_small_business_total =
                         ((string) plan.SelectToken("totals.outcomeIndicators.sumPushasesSmallBusiness.total") ?? "")
@@ -299,7 +299,7 @@ namespace ParserPlanGraph
                         if (!String.IsNullOrEmpty(placingWay_code))
                         {
                             string select_placing_way =
-                                $"SELECT id_placing_way FROM placing_way WHERE code = @code";
+                                $"SELECT id_placing_way FROM {Program.Prefix}tender_plan_placing_way WHERE code = @code";
                             MySqlCommand cmd9 = new MySqlCommand(select_placing_way, connect);
                             cmd9.Prepare();
                             cmd9.Parameters.AddWithValue("@code", placingWay_code);
@@ -314,14 +314,14 @@ namespace ParserPlanGraph
                             {
                                 reader4.Close();
                                 string insert_placing_way =
-                                    $"INSERT INTO placing_way SET code= @code, name= @name";
+                                    $"INSERT INTO {Program.Prefix}tender_plan_placing_way SET code= @code, name= @name";
                                 MySqlCommand cmd10 = new MySqlCommand(insert_placing_way, connect);
                                 cmd10.Prepare();
                                 cmd10.Parameters.AddWithValue("@code", placingWay_code);
                                 cmd10.Parameters.AddWithValue("@name", placingWay_name);
                                 cmd10.ExecuteNonQuery();
                                 id_placing_way = (int) cmd10.LastInsertedId;
-                                Log.Logger("Добавлен новый placing_way", file_path, id_placing_way);
+                                //Log.Logger("Добавлен новый placing_way", file_path, id_placing_way);
                             }
                         }
                         string finance_total =
