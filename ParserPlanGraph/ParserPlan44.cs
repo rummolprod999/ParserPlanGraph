@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using FluentFTP;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,8 +15,8 @@ namespace ParserPlanGraph
     {
         protected DataTable DtRegion;
         private string[] tender_plan = new[] {"tenderplan2017"};
-        private string[] tender_plan_cancel = new[] {"tenderplancancel"};
-        private string[] tender_plan_change = new[] {"tenderplanchange"};
+        private string[] tender_plan_cancel = new[] {"cancel"};
+        private string[] tender_plan_change = new[] {"change"};
 
         public ParserPlan44(TypeArguments arg) : base(arg)
         {
