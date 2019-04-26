@@ -18,9 +18,9 @@ namespace ParserPlanGraph
 
         public WorkWithFtp(string uri, string userName, string password)
         {
-            this._uri = uri;
-            this._userName = userName;
-            this._password = password;
+            _uri = uri;
+            _userName = userName;
+            _password = password;
         }
 
         public string ChangeWorkingDirectory(string path)
@@ -168,7 +168,7 @@ namespace ParserPlanGraph
 
             using (var stream = request.GetRequestStream())
             {
-                using (var fileStream = System.IO.File.Open(source, FileMode.Open))
+                using (var fileStream = File.Open(source, FileMode.Open))
                 {
                     int num;
 
@@ -193,7 +193,7 @@ namespace ParserPlanGraph
 
             using (var stream = request.GetRequestStream())
             {
-                using (var fileStream = System.IO.File.Open(source, FileMode.Open))
+                using (var fileStream = File.Open(source, FileMode.Open))
                 {
                     int num;
 

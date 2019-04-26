@@ -25,5 +25,10 @@ namespace ParserPlanGraph
             var xml = GetXml(File.ToString());
             Log.Logger("План change", FilePath, xml);
         }
+
+        protected virtual void OnAddPlanCange44(int obj)
+        {
+            AddPlanCange44?.Invoke(obj);
+        }
     }
 }

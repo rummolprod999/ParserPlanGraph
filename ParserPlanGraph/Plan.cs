@@ -16,8 +16,8 @@ namespace ParserPlanGraph
         {
             P = json;
             File = f;
-            this.Region = region;
-            this.RegionId = regionId;
+            Region = region;
+            RegionId = regionId;
             FilePath = File.ToString();
         }
 

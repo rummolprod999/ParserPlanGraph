@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 namespace ParserPlanGraph
 {
@@ -15,7 +16,7 @@ namespace ParserPlanGraph
                 s = $"{s} {parametrs[i]}";
             }
 
-            using (var sw = new StreamWriter(Program.FileLog, true, System.Text.Encoding.Default))
+            using (var sw = new StreamWriter(Program.FileLog, true, Encoding.Default))
             {
                 sw.WriteLine(s);
             }

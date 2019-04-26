@@ -15,7 +15,7 @@ namespace ParserPlanGraph
 
         public Parser(TypeArguments a)
         {
-            this.Arg = a;
+            Arg = a;
         }
 
         public virtual void Parsing()

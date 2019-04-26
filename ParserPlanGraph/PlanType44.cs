@@ -121,7 +121,7 @@ namespace ParserPlanGraph
 
                     if (!string.IsNullOrEmpty(customerRegNum))
                     {
-                        var selectCust = $"SELECT id FROM od_customer WHERE regNumber = @regNumber";
+                        var selectCust = "SELECT id FROM od_customer WHERE regNumber = @regNumber";
                         var cmd4 = new MySqlCommand(selectCust, connect);
                         cmd4.Prepare();
                         cmd4.Parameters.AddWithValue("@regNumber", customerRegNum);
@@ -152,7 +152,7 @@ namespace ParserPlanGraph
                                 .Trim();
                             var cusContactName = $"{cusLastName} {cusFirstName} {cusMiddleName}".Trim();
                             var insertCustomer =
-                                $"INSERT INTO od_customer SET regNumber = @regNumber, inn = @inn, kpp = @kpp, full_name = @full_name, phone = @phone, email = @email, contact_name = @contact_name";
+                                "INSERT INTO od_customer SET regNumber = @regNumber, inn = @inn, kpp = @kpp, full_name = @full_name, phone = @phone, email = @email, contact_name = @contact_name";
                             var cmd5 = new MySqlCommand(insertCustomer, connect);
                             cmd5.Prepare();
                             cmd5.Parameters.AddWithValue("@regNumber", customerRegNum);
@@ -166,15 +166,11 @@ namespace ParserPlanGraph
                             idCustomer = (int) cmd5.LastInsertedId;
                         }
                     }
-                    else
-                    {
-                        //Log.Logger("Нет customer_reg_num", file_path);
-                    }
 
                     var ownerRegNum = ((string) plan.SelectToken("commonInfo.ownerInfo.regNum") ?? "").Trim();
                     if (!string.IsNullOrEmpty(ownerRegNum))
                     {
-                        var selectOwner = $"SELECT id FROM od_customer WHERE regNumber = @regNumber";
+                        var selectOwner = "SELECT id FROM od_customer WHERE regNumber = @regNumber";
                         var cmd6 = new MySqlCommand(selectOwner, connect);
                         cmd6.Prepare();
                         cmd6.Parameters.AddWithValue("@regNumber", ownerRegNum);
@@ -209,7 +205,7 @@ namespace ParserPlanGraph
                             var ownerContactName =
                                 $"{ownerLastName} {ownerFirstName} {ownerMiddleName}".Trim();
                             var insertOwner =
-                                $"INSERT INTO od_customer SET regNumber = @regNumber, inn = @inn, kpp = @kpp, full_name = @full_name, phone = @phone, email = @email, contact_name = @contact_name";
+                                "INSERT INTO od_customer SET regNumber = @regNumber, inn = @inn, kpp = @kpp, full_name = @full_name, phone = @phone, email = @email, contact_name = @contact_name";
                             var cmd7 = new MySqlCommand(insertOwner, connect);
                             cmd7.Prepare();
                             cmd7.Parameters.AddWithValue("@regNumber", customerRegNum);
@@ -222,10 +218,6 @@ namespace ParserPlanGraph
                             cmd7.ExecuteNonQuery();
                             idOwner = (int) cmd7.LastInsertedId;
                         }
-                    }
-                    else
-                    {
-                        //Log.Logger("Нет owner_reg_num", file_path);
                     }
 
                     var sumPushasesSmallBusinessTotal =

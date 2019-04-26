@@ -25,5 +25,10 @@ namespace ParserPlanGraph
             var xml = GetXml(File.ToString());
             Log.Logger("План cancel", FilePath, xml);
         }
+
+        protected virtual void OnAddPlanCancel44(int obj)
+        {
+            AddPlanCancel44?.Invoke(obj);
+        }
     }
 }

@@ -13,9 +13,9 @@ namespace ParserPlanGraph
 {
     public class ParserPlan44 : Parser
     {
-        private readonly string[] _tenderPlan = new[] {"tenderplan2017"};
-        private string[] _tenderPlanCancel = new[] {"cancel"};
-        private string[] _tenderPlanChange = new[] {"change"};
+        private readonly string[] _tenderPlan = {"tenderplan2017"};
+        private string[] _tenderPlanCancel = {"cancel"};
+        private string[] _tenderPlanChange = {"change"};
         protected DataTable DtRegion;
 
         public ParserPlan44(TypeArguments arg) : base(arg)
@@ -61,47 +61,45 @@ namespace ParserPlanGraph
 
         public override void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
-            var filea = "";
-            var pathUnzip = "";
+            string filea;
+            string pathUnzip;
             filea = GetArch44(arch, pathParse);
-            if (!string.IsNullOrEmpty(filea))
+            if (string.IsNullOrEmpty(filea)) return;
+            pathUnzip = Unzipped.Unzip(filea);
+            if (pathUnzip != "")
             {
-                pathUnzip = Unzipped.Unzip(filea);
-                if (pathUnzip != "")
+                if (Directory.Exists(pathUnzip))
                 {
-                    if (Directory.Exists(pathUnzip))
+                    var dirInfo = new DirectoryInfo(pathUnzip);
+                    var filelist = dirInfo.GetFiles();
+                    var arrayTenderPlan = filelist
+                        .Where(a => _tenderPlan.Any(
+                            t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                        .ToList();
+                    var arrayTenderPlanCancel = filelist
+                        .Where(a => _tenderPlanCancel.Any(
+                            t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                        .ToList();
+                    var arrayTenderPlanChange = filelist
+                        .Where(a => _tenderPlanChange.Any(
+                            t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                        .ToList();
+                    foreach (var f in arrayTenderPlan)
                     {
-                        var dirInfo = new DirectoryInfo(pathUnzip);
-                        var filelist = dirInfo.GetFiles();
-                        var arrayTenderPlan = filelist
-                            .Where(a => _tenderPlan.Any(
-                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
-                            .ToList();
-                        var arrayTenderPlanCancel = filelist
-                            .Where(a => _tenderPlanCancel.Any(
-                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
-                            .ToList();
-                        var arrayTenderPlanChange = filelist
-                            .Where(a => _tenderPlanChange.Any(
-                                t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
-                            .ToList();
-                        foreach (var f in arrayTenderPlan)
-                        {
-                            Bolter(f, region, regionId, TypeFile44.Plan);
-                        }
-
-                        foreach (var f in arrayTenderPlanCancel)
-                        {
-                            Bolter(f, region, regionId, TypeFile44.PlanCancel);
-                        }
-
-                        foreach (var f in arrayTenderPlanChange)
-                        {
-                            Bolter(f, region, regionId, TypeFile44.PlanChange);
-                        }
-
-                        dirInfo.Delete(true);
+                        Bolter(f, region, regionId, TypeFile44.Plan);
                     }
+
+                    foreach (var f in arrayTenderPlanCancel)
+                    {
+                        Bolter(f, region, regionId, TypeFile44.PlanCancel);
+                    }
+
+                    foreach (var f in arrayTenderPlanChange)
+                    {
+                        Bolter(f, region, regionId, TypeFile44.PlanChange);
+                    }
+
+                    dirInfo.Delete(true);
                 }
             }
         }
@@ -161,7 +159,7 @@ namespace ParserPlanGraph
                 ftp.ChangeWorkingDirectory(pathParse);
                 archtemp = ftp.ListDirectory();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Log.Logger("Не могу найти директорию", pathParse);
             }
@@ -180,7 +178,7 @@ namespace ParserPlanGraph
                 ftp.ChangeWorkingDirectory(pathParse);
                 archtemp = ftp.ListDirectory();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Log.Logger("Не могу найти директорию", pathParse);
             }
@@ -223,7 +221,7 @@ namespace ParserPlanGraph
                 ftp.ChangeWorkingDirectory(pathParse);
                 archtemp = ftp.ListDirectory();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Log.Logger("Не могу найти директорию", pathParse);
             }

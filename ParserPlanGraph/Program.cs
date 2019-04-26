@@ -8,32 +8,31 @@ namespace ParserPlanGraph
 {
     internal class Program
     {
-        private static string _database;
-        private static string _tempPath44;
-        private static string _logPath44;
-        private static string _prefix;
-        private static string _user;
-        private static string _pass;
-        private static string _server;
-        private static int _port;
-        private static List<string> _years = new List<string>();
         public static readonly DateTime LocalDate = DateTime.Now;
         public static string FileLog;
-        public static string StrArg;
+        private static string StrArg;
         public static TypeArguments Periodparsing;
         public static string PathProgram;
         public static int AddPlan44 = 0;
         public static int AddPlanCancel44 = 0;
         public static int AddPlanChange44 = 0;
-        public static string Database => _database;
-        public static string Prefix => _prefix;
-        public static string User => _user;
-        public static string Pass => _pass;
-        public static string Server => _server;
-        public static int Port => _port;
-        public static List<string> Years => _years;
-        public static string TempPath => _tempPath44;
-        public static string LogPath => _logPath44;
+        public static string Database { get; private set; }
+
+        public static string Prefix { get; private set; }
+
+        public static string User { get; private set; }
+
+        public static string Pass { get; private set; }
+
+        public static string Server { get; private set; }
+
+        public static int Port { get; private set; }
+
+        private static List<string> Years { get; } = new List<string>();
+
+        public static string TempPath { get; private set; }
+
+        public static string LogPath { get; private set; }
 
         public static void Main(string[] args)
         {
@@ -53,17 +52,17 @@ namespace ParserPlanGraph
                 case "last44":
                     Periodparsing = TypeArguments.Last44;
                     Init(Periodparsing);
-                    ParserPlan44(Periodparsing);
+                    ParserPlan44();
                     break;
                 case "prev44":
                     Periodparsing = TypeArguments.Prev44;
                     Init(Periodparsing);
-                    ParserPlan44(Periodparsing);
+                    ParserPlan44();
                     break;
                 case "curr44":
                     Periodparsing = TypeArguments.Curr44;
                     Init(Periodparsing);
-                    ParserPlan44(Periodparsing);
+                    ParserPlan44();
                     break;
                 default:
                     Console.WriteLine(
@@ -75,20 +74,20 @@ namespace ParserPlanGraph
         private static void Init(TypeArguments arg)
         {
             var set = new GetSettings();
-            _database = set.Database;
-            _logPath44 = set.LogPathPlan44;
-            _prefix = set.Prefix;
-            _user = set.UserDb;
-            _pass = set.PassDb;
-            _tempPath44 = set.TempPathPlan44;
-            _server = set.Server;
-            _port = set.Port;
+            Database = set.Database;
+            LogPath = set.LogPathPlan44;
+            Prefix = set.Prefix;
+            User = set.UserDb;
+            Pass = set.PassDb;
+            TempPath = set.TempPathPlan44;
+            Server = set.Server;
+            Port = set.Port;
             var tmp = set.Years;
-            var tempYears = tmp.Split(new char[] {','});
+            var tempYears = tmp.Split(',');
 
             foreach (var s in tempYears.Select(v => $"_{v.Trim()}"))
             {
-                _years.Add(s);
+                Years.Add(s);
             }
 
             if (string.IsNullOrEmpty(TempPath) || string.IsNullOrEmpty(LogPath))
@@ -117,7 +116,7 @@ namespace ParserPlanGraph
                 FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Plan44_{LocalDate:dd_MM_yyyy}.log";
         }
 
-        private static void ParserPlan44(TypeArguments arg)
+        private static void ParserPlan44()
         {
             Log.Logger("Время начала парсинга Plan44");
             var p44 = new ParserPlan44(Periodparsing);
