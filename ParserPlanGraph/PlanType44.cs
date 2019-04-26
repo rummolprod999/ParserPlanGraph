@@ -41,10 +41,11 @@ namespace ParserPlanGraph
                 }
 
                 var planNumber = ((string) plan.SelectToken("planNumber") ?? "").Trim();
-                var versionNumber = ((string) plan.SelectToken("versionNumber") ?? "").Trim();
+                var versionNumber = (int?) plan.SelectToken("versionNumber") ?? 0;
                 if (string.IsNullOrEmpty(planNumber))
                 {
                     Log.Logger("У плана нет planNumber", FilePath);
+                    return;
                 }
 
                 using (var connect = ConnectToDb.GetDbConnection())
@@ -62,11 +63,33 @@ namespace ParserPlanGraph
                     if (reader.HasRows)
                     {
                         reader.Close();
-                        Log.Logger("Такой план уже есть в базе", FilePath, idXml, planNumber);
-                        //return;
+                        //Log.Logger("Такой план уже есть в базе", FilePath, idXml, planNumber);
+                        return;
                     }
 
                     reader.Close();
+                    var maxVerNumber =
+                        $"SELECT MAX(num_version) FROM {Program.Prefix}tender_plan WHERE id_region = @id_region AND plan_number = @plan_number";
+                    var cmd0 = new MySqlCommand(maxVerNumber, connect);
+                    cmd0.Prepare();
+                    cmd0.Parameters.AddWithValue("@id_region", RegionId);
+                    cmd0.Parameters.AddWithValue("@plan_number", planNumber);
+                    var max = (int) cmd0.ExecuteScalar();
+                    if (versionNumber >= max)
+                    {
+                        var delAll =
+                            $"DELETE tp, ta, tpos, tpr FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod WHERE id_region = @id_region AND plan_number = @plan_number";
+                        var cmd00 = new MySqlCommand(delAll, connect);
+                        cmd00.Prepare();
+                        cmd00.Parameters.AddWithValue("@id_region", RegionId);
+                        cmd00.Parameters.AddWithValue("@plan_number", planNumber);
+                        cmd00.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        return;
+                    }
+
                     var purchasePlanNumber =
                         ((string) plan.SelectToken("commonInfo.purchasePlanNumber") ?? "").Trim();
                     var year = ((string) plan.SelectToken("commonInfo.year") ?? "").Trim();
@@ -79,6 +102,7 @@ namespace ParserPlanGraph
                         (JsonConvert.SerializeObject(plan.SelectToken("commonInfo.publishDate") ?? "") ??
                          "").Trim('"');
                     var printform = ((string) plan.SelectToken("printForm.url") ?? "").Trim();
+
                     var cancelStatus = 0;
                     if (!string.IsNullOrEmpty(publishDate))
                     {
@@ -363,7 +387,7 @@ namespace ParserPlanGraph
                         var bankSupportInfo =
                             ((string) pos.SelectToken("purchaseConditions.bankSupportInfo.bankSupportText") ?? "")
                             .Trim();
-
+                        
                         var insertPosition =
                             $"INSERT INTO {Program.Prefix}tender_plan_position SET id_plan = @id_plan, position_number = @position_number, purchase_plan_position_number = @purchase_plan_position_number, purchase_object_name = @purchase_object_name, start_month = @start_month, end_month = @end_month, id_placing_way = @id_placing_way, finance_total = @finance_total, finance_total_current_year = @finance_total_current_year, max_price = @max_price, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, OKEI_code = @OKEI_code, OKEI_name = @OKEI_name, pos_description = @pos_description, products_quantity_total = @products_quantity_total, products_quantity_current_year = @products_quantity_current_year, purchase_fin_condition = @purchase_fin_condition, contract_fin_condition = @contract_fin_condition, advance_fin_condition = @advance_fin_condition, purchase_graph = @purchase_graph, bank_support_info = @bank_support_info";
                         var cmd11 = new MySqlCommand(insertPosition, connect);
