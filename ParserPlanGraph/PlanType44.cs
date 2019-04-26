@@ -78,7 +78,7 @@ namespace ParserPlanGraph
                     if (versionNumber >= max)
                     {
                         var delAll =
-                            $"DELETE tp, ta, tpos, tpr FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod WHERE id_region = @id_region AND plan_number = @plan_number";
+                            $"DELETE tp, ta, tpos, tpr FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod LEFT JOIN tender_plan_products AS trpod ON tprod.id_tender_plan_position = tpos.id WHERE id_region = @id_region AND plan_number = @plan_number";
                         var cmd00 = new MySqlCommand(delAll, connect);
                         cmd00.Prepare();
                         cmd00.Parameters.AddWithValue("@id_region", RegionId);
@@ -349,19 +349,6 @@ namespace ParserPlanGraph
                         var financeTotalCurrentYear =
                             ((string) pos.SelectToken("commonInfo.financeInfo.planPayments.currentYear") ?? "").Trim();
                         var maxPrice = ((string) pos.SelectToken("commonInfo.financeInfo.maxPrice") ?? "").Trim();
-                        var okpd2Code =
-                            ((string) pos.SelectToken("purchaseObjectInfo.OKPD2Info.OKPD2.code") ?? "").Trim();
-                        var okpd2Name =
-                            ((string) pos.SelectToken("purchaseObjectInfo.OKPD2Info.OKPD2.name") ?? "").Trim();
-                        var okeiCode = ((string) pos.SelectToken("purchaseObjectInfo.OKEI.code") ?? "").Trim();
-                        var okeiName = ((string) pos.SelectToken("purchaseObjectInfo.OKEI.name") ?? "").Trim();
-                        var posDescription = ((string) pos.SelectToken("purchaseObjectInfo.objectDescription") ?? "")
-                            .Trim();
-                        var productsQuantityTotal =
-                            ((string) pos.SelectToken("purchaseObjectInfo.productsQuantityInfo.total") ?? "").Trim();
-                        var productsQuantityCurrentYear =
-                            ((string) pos.SelectToken("purchaseObjectInfo.productsQuantityInfo.currentYear") ?? "")
-                            .Trim();
                         var purchaseFinCondition =
                             ((string) pos.SelectToken("purchaseConditions.purchaseFinCondition.amount") ?? "").Trim();
                         var contractFinCondition =
@@ -387,9 +374,9 @@ namespace ParserPlanGraph
                         var bankSupportInfo =
                             ((string) pos.SelectToken("purchaseConditions.bankSupportInfo.bankSupportText") ?? "")
                             .Trim();
-                        
+
                         var insertPosition =
-                            $"INSERT INTO {Program.Prefix}tender_plan_position SET id_plan = @id_plan, position_number = @position_number, purchase_plan_position_number = @purchase_plan_position_number, purchase_object_name = @purchase_object_name, start_month = @start_month, end_month = @end_month, id_placing_way = @id_placing_way, finance_total = @finance_total, finance_total_current_year = @finance_total_current_year, max_price = @max_price, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, OKEI_code = @OKEI_code, OKEI_name = @OKEI_name, pos_description = @pos_description, products_quantity_total = @products_quantity_total, products_quantity_current_year = @products_quantity_current_year, purchase_fin_condition = @purchase_fin_condition, contract_fin_condition = @contract_fin_condition, advance_fin_condition = @advance_fin_condition, purchase_graph = @purchase_graph, bank_support_info = @bank_support_info";
+                            $"INSERT INTO {Program.Prefix}tender_plan_position SET id_plan = @id_plan, position_number = @position_number, purchase_plan_position_number = @purchase_plan_position_number, purchase_object_name = @purchase_object_name, start_month = @start_month, end_month = @end_month, id_placing_way = @id_placing_way, finance_total = @finance_total, finance_total_current_year = @finance_total_current_year, max_price = @max_price, purchase_fin_condition = @purchase_fin_condition, contract_fin_condition = @contract_fin_condition, advance_fin_condition = @advance_fin_condition, purchase_graph = @purchase_graph, bank_support_info = @bank_support_info";
                         var cmd11 = new MySqlCommand(insertPosition, connect);
                         cmd11.Prepare();
                         cmd11.Parameters.AddWithValue("@id_plan", idPlan);
@@ -402,13 +389,6 @@ namespace ParserPlanGraph
                         cmd11.Parameters.AddWithValue("@finance_total", financeTotal);
                         cmd11.Parameters.AddWithValue("@finance_total_current_year", financeTotalCurrentYear);
                         cmd11.Parameters.AddWithValue("@max_price", maxPrice);
-                        cmd11.Parameters.AddWithValue("@OKPD2_code", okpd2Code);
-                        cmd11.Parameters.AddWithValue("@OKPD2_name", okpd2Name);
-                        cmd11.Parameters.AddWithValue("@OKEI_code", okeiCode);
-                        cmd11.Parameters.AddWithValue("@OKEI_name", okeiName);
-                        cmd11.Parameters.AddWithValue("@pos_description", posDescription);
-                        cmd11.Parameters.AddWithValue("@products_quantity_total", productsQuantityTotal);
-                        cmd11.Parameters.AddWithValue("@products_quantity_current_year", productsQuantityCurrentYear);
                         cmd11.Parameters.AddWithValue("@purchase_fin_condition", purchaseFinCondition);
                         cmd11.Parameters.AddWithValue("@contract_fin_condition", contractFinCondition);
                         cmd11.Parameters.AddWithValue("@advance_fin_condition", advanceFinCondition);
@@ -416,6 +396,78 @@ namespace ParserPlanGraph
                         cmd11.Parameters.AddWithValue("@bank_support_info", bankSupportInfo);
                         cmd11.ExecuteNonQuery();
                         var idProd = (int) cmd11.LastInsertedId;
+                        var products = GetElements(pos, "KTRUInfo.productsSpecification.product");
+                        var insertProduct =
+                            $"INSERT INTO {Program.Prefix}tender_plan_products SET id_tender_plan_position = @id_tender_plan_position, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, OKEI_code = @OKEI_code, OKEI_name = @OKEI_name, prod_description = @prod_description, products_quantity_total = @products_quantity_total, products_quantity_current_year = @products_quantity_current_year, product_sum_total = @product_sum_total, product_sum_current_year = @product_sum_current_year";
+                        if (products.Count == 0)
+                        {
+                            var okpd2Code =
+                                ((string) pos.SelectToken("purchaseObjectInfo.OKPD2Info.OKPD2.code") ?? "").Trim();
+                            var okpd2Name =
+                                ((string) pos.SelectToken("purchaseObjectInfo.OKPD2Info.OKPD2.name") ?? "").Trim();
+                            var okeiCode = ((string) pos.SelectToken("purchaseObjectInfo.OKEI.code") ?? "").Trim();
+                            var okeiName = ((string) pos.SelectToken("purchaseObjectInfo.OKEI.name") ?? "").Trim();
+                            var posDescription =
+                                ((string) pos.SelectToken("purchaseObjectInfo.objectDescription") ?? "")
+                                .Trim();
+                            var productsQuantityTotal =
+                                ((string) pos.SelectToken("purchaseObjectInfo.productsQuantityInfo.total") ?? "")
+                                .Trim();
+                            var productsQuantityCurrentYear =
+                                ((string) pos.SelectToken("purchaseObjectInfo.productsQuantityInfo.currentYear") ?? "")
+                                .Trim();
+                            var cmd14 = new MySqlCommand(insertProduct, connect);
+                            cmd14.Prepare();
+                            cmd14.Parameters.AddWithValue("@id_tender_plan_position", idProd);
+                            cmd14.Parameters.AddWithValue("@OKPD2_code", okpd2Code);
+                            cmd14.Parameters.AddWithValue("@OKPD2_name", okpd2Name);
+                            cmd14.Parameters.AddWithValue("@OKEI_code", okeiCode);
+                            cmd14.Parameters.AddWithValue("@OKEI_name", okeiName);
+                            cmd14.Parameters.AddWithValue("@prod_description", posDescription);
+                            cmd14.Parameters.AddWithValue("@products_quantity_total", productsQuantityTotal);
+                            cmd14.Parameters.AddWithValue("@products_quantity_current_year",
+                                productsQuantityCurrentYear);
+                            cmd14.Parameters.AddWithValue("@product_sum_total", 0.0m);
+                            cmd14.Parameters.AddWithValue("@product_sum_current_year", 0.0m);
+                            cmd14.ExecuteNonQuery();
+                        }
+                        else
+                        {
+                            foreach (var p in products)
+                            {
+                                var okpd2Code =
+                                    ((string) p.SelectToken("OKPD2.code") ?? "").Trim();
+                                var okpd2Name =
+                                    ((string) p.SelectToken("OKPD2.name") ?? "").Trim();
+                                var okeiCode = ((string) p.SelectToken("productOKEI.code") ?? "").Trim();
+                                var okeiName = ((string) p.SelectToken("productOKEI.name") ?? "").Trim();
+                                var posDescription = ((string) p.SelectToken("productName") ?? "")
+                                    .Trim();
+                                var productQuantityTotal =
+                                    (decimal?) p.SelectToken("productsQuantityInfo.total") ?? 0.0m;
+                                var productQuantityCurrentYear =
+                                    (decimal?) p.SelectToken("productsQuantityInfo.currentYear") ?? 0.0m;
+                                var productSumTotal =
+                                    (decimal?) p.SelectToken("productsQuantityInfo.total") ?? 0.0m;
+                                var productSumCurrentYear =
+                                    (decimal?) p.SelectToken("productsQuantityInfo.currentYear") ?? 0.0m;
+                                var cmd14 = new MySqlCommand(insertProduct, connect);
+                                cmd14.Prepare();
+                                cmd14.Parameters.AddWithValue("@id_tender_plan_position", idProd);
+                                cmd14.Parameters.AddWithValue("@OKPD2_code", okpd2Code);
+                                cmd14.Parameters.AddWithValue("@OKPD2_name", okpd2Name);
+                                cmd14.Parameters.AddWithValue("@OKEI_code", okeiCode);
+                                cmd14.Parameters.AddWithValue("@OKEI_name", okeiName);
+                                cmd14.Parameters.AddWithValue("@prod_description", posDescription);
+                                cmd14.Parameters.AddWithValue("@products_quantity_total", productQuantityTotal);
+                                cmd14.Parameters.AddWithValue("@products_quantity_current_year",
+                                    productQuantityCurrentYear);
+                                cmd14.Parameters.AddWithValue("@product_sum_total", productSumTotal);
+                                cmd14.Parameters.AddWithValue("@product_sum_current_year", productSumCurrentYear);
+                                cmd14.ExecuteNonQuery();
+                            }
+                        }
+
                         var recPref = GetElements(pos,
                             "purchaseConditions.preferensesRequirements.preferenseRequirement");
                         foreach (var pr in recPref)
