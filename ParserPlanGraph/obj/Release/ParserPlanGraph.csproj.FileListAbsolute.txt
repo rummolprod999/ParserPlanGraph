@@ -13,3 +13,7 @@
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Ftp.xml
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.csprojAssemblyReference.cache
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.csproj.CopyComplete
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Google.Protobuf.dll
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Google.Protobuf.pdb
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Google.Protobuf.xml
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/MySql.Data.xml

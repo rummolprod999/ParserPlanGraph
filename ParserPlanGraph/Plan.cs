@@ -6,21 +6,21 @@ namespace ParserPlanGraph
 {
     public class Plan
     {
-        protected readonly JObject p;
-        protected readonly FileInfo file;
-        protected readonly string region;
-        protected readonly int region_id;
-        protected readonly string file_path;
+        protected readonly FileInfo File;
+        protected readonly string FilePath;
+        protected readonly JObject P;
+        protected readonly string Region;
+        protected readonly int RegionId;
 
-        public Plan(FileInfo f, string region, int region_id, JObject json)
+        public Plan(FileInfo f, string region, int regionId, JObject json)
         {
-            p = json;
-            file = f;
-            this.region = region;
-            this.region_id = region_id;
-            file_path = file.ToString();
+            P = json;
+            File = f;
+            this.Region = region;
+            this.RegionId = regionId;
+            FilePath = File.ToString();
         }
-        
+
         public virtual void Parsing()
         {
         }
@@ -37,25 +37,25 @@ namespace ParserPlanGraph
 
             return "";
         }
+
         public List<JToken> GetElements(JToken j, string s)
         {
             var els = new List<JToken>();
-            var els_obj = j.SelectToken(s);
-            if (els_obj != null && els_obj.Type != JTokenType.Null)
+            var elsObj = j.SelectToken(s);
+            if (elsObj != null && elsObj.Type != JTokenType.Null)
             {
-                switch (els_obj.Type)
+                switch (elsObj.Type)
                 {
                     case JTokenType.Object:
-                        els.Add(els_obj);
+                        els.Add(elsObj);
                         break;
                     case JTokenType.Array:
-                        els.AddRange(els_obj);
+                        els.AddRange(elsObj);
                         break;
                 }
             }
 
             return els;
         }
-
     }
 }

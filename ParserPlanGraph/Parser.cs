@@ -4,18 +4,18 @@ using System.Data;
 using System.IO;
 using System.Threading;
 using FluentFTP;
-using MySql.Data.MySqlClient;
 using Limilabs.FTP.Client;
+using MySql.Data.MySqlClient;
 
 namespace ParserPlanGraph
 {
     public class Parser : IParser
     {
-        protected TypeArguments arg;
+        protected TypeArguments Arg;
 
         public Parser(TypeArguments a)
         {
-            this.arg = a;
+            this.Arg = a;
         }
 
         public virtual void Parsing()
@@ -26,7 +26,7 @@ namespace ParserPlanGraph
         {
             var reg = "SELECT * FROM region";
             DataTable dt;
-            using (var connect = ConnectToDb.GetDBConnection())
+            using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
                 var adapter = new MySqlDataAdapter(reg, connect);
@@ -34,14 +34,15 @@ namespace ParserPlanGraph
                 adapter.Fill(ds);
                 dt = ds.Tables[0];
             }
+
             return dt;
         }
 
-        public virtual void GetListFileArch(string Arch, string PathParse, string region, int region_id)
+        public virtual void GetListFileArch(string arch, string pathParse, string region, int regionId)
         {
         }
 
-        public string GetArch44(string Arch, string PathParse)
+        public string GetArch44(string arch, string pathParse)
         {
             var file = "";
             var count = 1;
@@ -50,30 +51,32 @@ namespace ParserPlanGraph
                 try
                 {
                     /*string FileOnServer = $"{PathParse}/{Arch}";*/
-                    var FileOnServer = $"{Arch}";
-                    file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{Arch}";
+                    var fileOnServer = $"{arch}";
+                    file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{arch}";
                     /*FtpClient ftp = ClientFtp44();
                     ftp.SetWorkingDirectory(PathParse);
                     ftp.DownloadFile(file, FileOnServer);
                     ftp.Disconnect();*/
                     using (var client = new Ftp())
                     {
-                        client.Connect("ftp.zakupki.gov.ru");    // or ConnectSSL for SSL
+                        client.Connect("ftp.zakupki.gov.ru"); // or ConnectSSL for SSL
                         client.Login("free", "free");
-                        client.ChangeFolder(PathParse);
-                        client.Download(FileOnServer, file);
+                        client.ChangeFolder(pathParse);
+                        client.Download(fileOnServer, file);
 
                         client.Close();
                     }
+
                     if (count > 1)
                     {
                         Log.Logger("Удалось скачать архив после попытки", count);
                     }
+
                     return file;
                 }
                 catch (Exception e)
                 {
-                    Log.Logger("Не удалось скачать файл", Arch, e);
+                    Log.Logger("Не удалось скачать файл", arch, e);
                     if (count > 50)
                     {
                         return file;
@@ -92,36 +95,35 @@ namespace ParserPlanGraph
             return client;
         }
 
-        public virtual void Bolter(FileInfo f, string region, int region_id, TypeFile44 typefile)
+        public virtual void Bolter(FileInfo f, string region, int regionId, TypeFile44 typefile)
         {
         }
 
-        public virtual List<String> GetListArchLast(string PathParse, string RegionPath)
-        {
-            var arch = new List<string>();
-
-            return arch;
-        }
-
-        public virtual List<String> GetListArchCurr(string PathParse, string RegionPath)
+        public virtual List<String> GetListArchLast(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchPrev(string PathParse, string RegionPath)
+        public virtual List<String> GetListArchCurr(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 
             return arch;
         }
+
+        public virtual List<String> GetListArchPrev(string pathParse, string regionPath)
+        {
+            var arch = new List<string>();
+
+            return arch;
+        }
+
         public WorkWithFtp ClientFtp44_old()
         {
             var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
             return ftpCl;
         }
-
-        
     }
 }

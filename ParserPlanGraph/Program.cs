@@ -17,6 +17,14 @@ namespace ParserPlanGraph
         private static string _server;
         private static int _port;
         private static List<string> _years = new List<string>();
+        public static readonly DateTime LocalDate = DateTime.Now;
+        public static string FileLog;
+        public static string StrArg;
+        public static TypeArguments Periodparsing;
+        public static string PathProgram;
+        public static int AddPlan44 = 0;
+        public static int AddPlanCancel44 = 0;
+        public static int AddPlanChange44 = 0;
         public static string Database => _database;
         public static string Prefix => _prefix;
         public static string User => _user;
@@ -24,16 +32,8 @@ namespace ParserPlanGraph
         public static string Server => _server;
         public static int Port => _port;
         public static List<string> Years => _years;
-        public static readonly DateTime LocalDate = DateTime.Now;
-        public static string FileLog;
-        public static string StrArg;
-        public static TypeArguments Periodparsing;
-        public static string PathProgram;
         public static string TempPath => _tempPath44;
         public static string LogPath => _logPath44;
-        public static int AddPlan44 = 0;
-        public static int AddPlanCancel44 = 0;
-        public static int AddPlanChange44 = 0;
 
         public static void Main(string[] args)
         {
@@ -71,25 +71,26 @@ namespace ParserPlanGraph
                     break;
             }
         }
-        
+
         private static void Init(TypeArguments arg)
         {
             var set = new GetSettings();
             _database = set.Database;
             _logPath44 = set.LogPathPlan44;
             _prefix = set.Prefix;
-            _user = set.UserDB;
-            _pass = set.PassDB;
+            _user = set.UserDb;
+            _pass = set.PassDb;
             _tempPath44 = set.TempPathPlan44;
             _server = set.Server;
             _port = set.Port;
             var tmp = set.Years;
-            var temp_years = tmp.Split(new char[] {','});
+            var tempYears = tmp.Split(new char[] {','});
 
-            foreach (var s in temp_years.Select(v => $"_{v.Trim()}"))
+            foreach (var s in tempYears.Select(v => $"_{v.Trim()}"))
             {
                 _years.Add(s);
             }
+
             if (String.IsNullOrEmpty(TempPath) || String.IsNullOrEmpty(LogPath))
             {
                 Console.WriteLine("Не получится создать папки для парсинга");
@@ -106,10 +107,12 @@ namespace ParserPlanGraph
             {
                 Directory.CreateDirectory(TempPath);
             }
+
             if (!Directory.Exists(LogPath))
             {
                 Directory.CreateDirectory(LogPath);
             }
+
             if (arg == TypeArguments.Curr44 || arg == TypeArguments.Last44 || arg == TypeArguments.Prev44)
                 FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Plan44_{LocalDate:dd_MM_yyyy}.log";
         }
@@ -126,7 +129,6 @@ namespace ParserPlanGraph
             Log.Logger("Добавили PlanCancel44", AddPlanCancel44);
             Log.Logger("Добавили PlanChange44", AddPlanChange44);
             Log.Logger("Время окончания парсинга Plan44");
-            
         }
     }
 }

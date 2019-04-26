@@ -6,7 +6,7 @@ namespace ParserPlanGraph
     {
         void Parsing();
         DataTable GetRegions();
-        void GetListFileArch(string Arch, string PathParse, string region, int region_id);
-        string GetArch44(string Arch, string PathParse);
+        void GetListFileArch(string arch, string pathParse, string region, int regionId);
+        string GetArch44(string arch, string pathParse);
     }
 }

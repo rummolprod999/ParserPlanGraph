@@ -12,30 +12,30 @@ namespace ParserPlanGraph
             var fileInf = new FileInfo(filea);
             if (fileInf.Exists)
             {
-                var r_point = filea.LastIndexOf('.');
-                var l_dir = filea.Substring(0, r_point);
-                Directory.CreateDirectory(l_dir);
+                var rPoint = filea.LastIndexOf('.');
+                var lDir = filea.Substring(0, rPoint);
+                Directory.CreateDirectory(lDir);
                 try
                 {
-                    ZipFile.ExtractToDirectory(filea, l_dir);
+                    ZipFile.ExtractToDirectory(filea, lDir);
                     fileInf.Delete();
-                    return l_dir;
+                    return lDir;
                 }
                 catch (Exception e)
                 {
                     Log.Logger("Не удалось извлечь файл", e, filea);
                     try
                     {
-                        var MyProcess = new Process {StartInfo = new ProcessStartInfo("unzip", $"{filea} -d {l_dir}")};
-                        MyProcess.Start();
-                        MyProcess.WaitForExit();
+                        var myProcess = new Process {StartInfo = new ProcessStartInfo("unzip", $"{filea} -d {lDir}")};
+                        myProcess.Start();
+                        myProcess.WaitForExit();
                         Log.Logger("Извлекли файл альтернативным методом", filea);
-                        return l_dir;
+                        return lDir;
                     }
                     catch (Exception exception)
                     {
                         Log.Logger("Не удалось извлечь файл альтернативным методом", exception, filea);
-                        return l_dir;
+                        return lDir;
                     }
                 }
             }

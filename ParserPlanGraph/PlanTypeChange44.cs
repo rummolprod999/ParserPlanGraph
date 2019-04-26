@@ -4,25 +4,26 @@ using Newtonsoft.Json.Linq;
 
 namespace ParserPlanGraph
 {
-    public class PlanTypeChange44:Plan
+    public class PlanTypeChange44 : Plan
     {
-        public event Action<int> AddPlanCange44;
-        public PlanTypeChange44(FileInfo f, string region, int region_id, JObject json)
-            : base(f, region, region_id, json)
+        public PlanTypeChange44(FileInfo f, string region, int regionId, JObject json)
+            : base(f, region, regionId, json)
         {
             AddPlanCange44 += delegate(int d)
             {
                 if (d > 0)
                     Program.AddPlanChange44++;
                 else
-                    Log.Logger("Не удалось добавить Plan44", file_path);
+                    Log.Logger("Не удалось добавить Plan44", FilePath);
             };
         }
-        
+
+        public event Action<int> AddPlanCange44;
+
         public override void Parsing()
         {
-            var xml = GetXml(file.ToString());
-            Log.Logger("План change", file_path, xml);
+            var xml = GetXml(File.ToString());
+            Log.Logger("План change", FilePath, xml);
         }
     }
 }
