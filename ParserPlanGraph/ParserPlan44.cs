@@ -67,39 +67,37 @@ namespace ParserPlanGraph
             if (string.IsNullOrEmpty(filea)) return;
             pathUnzip = Unzipped.Unzip(filea);
             if (pathUnzip == "") return;
-            if (Directory.Exists(pathUnzip))
+            if (!Directory.Exists(pathUnzip)) return;
+            var dirInfo = new DirectoryInfo(pathUnzip);
+            var filelist = dirInfo.GetFiles();
+            var arrayTenderPlan = filelist
+                .Where(a => _tenderPlan.Any(
+                    t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                .ToList();
+            var arrayTenderPlanCancel = filelist
+                .Where(a => _tenderPlanCancel.Any(
+                    t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                .ToList();
+            var arrayTenderPlanChange = filelist
+                .Where(a => _tenderPlanChange.Any(
+                    t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
+                .ToList();
+            foreach (var f in arrayTenderPlan)
             {
-                var dirInfo = new DirectoryInfo(pathUnzip);
-                var filelist = dirInfo.GetFiles();
-                var arrayTenderPlan = filelist
-                    .Where(a => _tenderPlan.Any(
-                        t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
-                    .ToList();
-                var arrayTenderPlanCancel = filelist
-                    .Where(a => _tenderPlanCancel.Any(
-                        t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
-                    .ToList();
-                var arrayTenderPlanChange = filelist
-                    .Where(a => _tenderPlanChange.Any(
-                        t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
-                    .ToList();
-                foreach (var f in arrayTenderPlan)
-                {
-                    Bolter(f, region, regionId, TypeFile44.Plan);
-                }
-
-                foreach (var f in arrayTenderPlanCancel)
-                {
-                    Bolter(f, region, regionId, TypeFile44.PlanCancel);
-                }
-
-                foreach (var f in arrayTenderPlanChange)
-                {
-                    Bolter(f, region, regionId, TypeFile44.PlanChange);
-                }
-
-                dirInfo.Delete(true);
+                Bolter(f, region, regionId, TypeFile44.Plan);
             }
+
+            foreach (var f in arrayTenderPlanCancel)
+            {
+                Bolter(f, region, regionId, TypeFile44.PlanCancel);
+            }
+
+            foreach (var f in arrayTenderPlanChange)
+            {
+                Bolter(f, region, regionId, TypeFile44.PlanChange);
+            }
+
+            dirInfo.Delete(true);
         }
 
         public override void Bolter(FileInfo f, string region, int regionId, TypeFile44 typefile)
