@@ -64,7 +64,7 @@ namespace ParserPlanGraph
             var filea = "";
             var pathUnzip = "";
             filea = GetArch44(arch, pathParse);
-            if (!String.IsNullOrEmpty(filea))
+            if (!string.IsNullOrEmpty(filea))
             {
                 pathUnzip = Unzipped.Unzip(filea);
                 if (pathUnzip != "")
@@ -140,18 +140,18 @@ namespace ParserPlanGraph
                         a.Parsing();
                         break;
                     case TypeFile44.PlanCancel:
-                        var b = new PlanTypeCancel44(f, region, regionId, json);
-                        b.Parsing();
+                        /*var b = new PlanTypeCancel44(f, region, regionId, json);
+                        b.Parsing();*/
                         break;
                     case TypeFile44.PlanChange:
-                        var c = new PlanTypeChange44(f, region, regionId, json);
-                        c.Parsing();
+                        /*var c = new PlanTypeChange44(f, region, regionId, json);
+                        c.Parsing();*/
                         break;
                 }
             }
         }
 
-        public override List<String> GetListArchLast(string pathParse, string regionPath)
+        public override List<string> GetListArchLast(string pathParse, string regionPath)
         {
             var archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
@@ -169,7 +169,7 @@ namespace ParserPlanGraph
             return archtemp.Where(a => a.ToLower().IndexOf("tenderplan", StringComparison.Ordinal) != -1).ToList();
         }
 
-        public override List<String> GetListArchCurr(string pathParse, string regionPath)
+        public override List<string> GetListArchCurr(string pathParse, string regionPath)
         {
             var arch = new List<string>();
             var archtemp = new List<string>();
@@ -198,23 +198,21 @@ namespace ParserPlanGraph
                     var reader = cmd.ExecuteReader();
                     var resRead = reader.HasRows;
                     reader.Close();
-                    if (!resRead)
-                    {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}archiv_plan_graphs SET arhiv = @archive";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", a);
-                        cmd1.ExecuteNonQuery();
-                        arch.Add(a);
-                    }
+                    if (resRead) continue;
+                    var addArch =
+                        $"INSERT INTO {Program.Prefix}archiv_plan_graphs SET arhiv = @archive";
+                    var cmd1 = new MySqlCommand(addArch, connect);
+                    cmd1.Prepare();
+                    cmd1.Parameters.AddWithValue("@archive", a);
+                    cmd1.ExecuteNonQuery();
+                    arch.Add(a);
                 }
             }
 
             return arch;
         }
 
-        public override List<String> GetListArchPrev(string pathParse, string regionPath)
+        public override List<string> GetListArchPrev(string pathParse, string regionPath)
         {
             var arch = new List<string>();
             var archtemp = new List<string>();
@@ -245,16 +243,14 @@ namespace ParserPlanGraph
                     var reader = cmd.ExecuteReader();
                     var resRead = reader.HasRows;
                     reader.Close();
-                    if (!resRead)
-                    {
-                        var addArch =
-                            $"INSERT INTO {Program.Prefix}archiv_plan_graphs SET arhiv = @archive";
-                        var cmd1 = new MySqlCommand(addArch, connect);
-                        cmd1.Prepare();
-                        cmd1.Parameters.AddWithValue("@archive", prevA);
-                        cmd1.ExecuteNonQuery();
-                        arch.Add(a);
-                    }
+                    if (resRead) continue;
+                    var addArch =
+                        $"INSERT INTO {Program.Prefix}archiv_plan_graphs SET arhiv = @archive";
+                    var cmd1 = new MySqlCommand(addArch, connect);
+                    cmd1.Prepare();
+                    cmd1.Parameters.AddWithValue("@archive", prevA);
+                    cmd1.ExecuteNonQuery();
+                    arch.Add(a);
                 }
             }
 

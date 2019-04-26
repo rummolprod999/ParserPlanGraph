@@ -49,7 +49,7 @@ namespace ParserPlanGraph
                             Server = xnode.InnerText;
                             break;
                         case "port":
-                            Port = Int32.TryParse(xnode.InnerText, out Port) ? Int32.Parse(xnode.InnerText) : 3306;
+                            Port = int.TryParse(xnode.InnerText, out Port) ? int.Parse(xnode.InnerText) : 3306;
                             break;
                         case "years":
                             Years = xnode.InnerText;
@@ -58,13 +58,11 @@ namespace ParserPlanGraph
                 }
             }
 
-            if (String.IsNullOrEmpty(LogPathPlan44) || String.IsNullOrEmpty(TempPathPlan44) ||
-                String.IsNullOrEmpty(Database) || String.IsNullOrEmpty(UserDb) || String.IsNullOrEmpty(Server) ||
-                String.IsNullOrEmpty(Years))
-            {
-                Console.WriteLine("Некоторые поля в файле настроек пустые");
-                Environment.Exit(0);
-            }
+            if (!string.IsNullOrEmpty(LogPathPlan44) && !string.IsNullOrEmpty(TempPathPlan44) &&
+                !string.IsNullOrEmpty(Database) && !string.IsNullOrEmpty(UserDb) && !string.IsNullOrEmpty(Server) &&
+                !string.IsNullOrEmpty(Years)) return;
+            Console.WriteLine("Некоторые поля в файле настроек пустые");
+            Environment.Exit(0);
         }
     }
 }

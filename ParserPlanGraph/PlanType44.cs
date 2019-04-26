@@ -34,7 +34,7 @@ namespace ParserPlanGraph
                 var plan = firstOrDefault.Value;
                 var idXml = ((string) plan.SelectToken("id") ?? "").Trim();
 
-                if (String.IsNullOrEmpty(idXml))
+                if (string.IsNullOrEmpty(idXml))
                 {
                     Log.Logger("У плана нет id", FilePath);
                     return;
@@ -42,7 +42,7 @@ namespace ParserPlanGraph
 
                 var planNumber = ((string) plan.SelectToken("planNumber") ?? "").Trim();
                 var versionNumber = ((string) plan.SelectToken("versionNumber") ?? "").Trim();
-                if (String.IsNullOrEmpty(planNumber))
+                if (string.IsNullOrEmpty(planNumber))
                 {
                     Log.Logger("У плана нет planNumber", FilePath);
                 }
@@ -80,7 +80,7 @@ namespace ParserPlanGraph
                          "").Trim('"');
                     var printform = ((string) plan.SelectToken("printForm.url") ?? "").Trim();
                     var cancelStatus = 0;
-                    if (!String.IsNullOrEmpty(publishDate))
+                    if (!string.IsNullOrEmpty(publishDate))
                     {
                         var selectDateP =
                             $"SELECT id, create_date FROM {Program.Prefix}tender_plan WHERE id_region = @id_region AND plan_number = @plan_number";
@@ -119,7 +119,7 @@ namespace ParserPlanGraph
                     var customerRegNum =
                         ((string) plan.SelectToken("commonInfo.customerInfo.regNum") ?? "").Trim();
 
-                    if (!String.IsNullOrEmpty(customerRegNum))
+                    if (!string.IsNullOrEmpty(customerRegNum))
                     {
                         var selectCust = $"SELECT id FROM od_customer WHERE regNumber = @regNumber";
                         var cmd4 = new MySqlCommand(selectCust, connect);
@@ -172,7 +172,7 @@ namespace ParserPlanGraph
                     }
 
                     var ownerRegNum = ((string) plan.SelectToken("commonInfo.ownerInfo.regNum") ?? "").Trim();
-                    if (!String.IsNullOrEmpty(ownerRegNum))
+                    if (!string.IsNullOrEmpty(ownerRegNum))
                     {
                         var selectOwner = $"SELECT id FROM od_customer WHERE regNumber = @regNumber";
                         var cmd6 = new MySqlCommand(selectOwner, connect);
@@ -299,7 +299,7 @@ namespace ParserPlanGraph
                             ((string) pos.SelectToken("commonInfo.placingWayInfo.placingWay.code") ?? "").Trim();
                         var placingWayName =
                             ((string) pos.SelectToken("commonInfo.placingWayInfo.placingWay.name") ?? "").Trim();
-                        if (!String.IsNullOrEmpty(placingWayCode))
+                        if (!string.IsNullOrEmpty(placingWayCode))
                         {
                             var selectPlacingWay =
                                 $"SELECT id_placing_way FROM {Program.Prefix}tender_plan_placing_way WHERE code = @code";
@@ -354,14 +354,14 @@ namespace ParserPlanGraph
                             ((string) pos.SelectToken("purchaseConditions.advanceFinCondition.amount") ?? "").Trim();
                         var purchaseGraph =
                             ((string) pos.SelectToken("purchaseConditions.purchaseGraph.plannedPeriod") ?? "").Trim();
-                        if (String.IsNullOrEmpty(purchaseGraph))
+                        if (string.IsNullOrEmpty(purchaseGraph))
                         {
                             purchaseGraph =
                                 ((string) pos.SelectToken(
                                      "purchaseConditions.purchaseGraph.periodicity.periodicityType") ?? "").Trim();
                         }
 
-                        if (String.IsNullOrEmpty(purchaseGraph))
+                        if (string.IsNullOrEmpty(purchaseGraph))
                         {
                             purchaseGraph =
                                 ((string) pos.SelectToken(

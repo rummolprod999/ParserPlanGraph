@@ -99,28 +99,28 @@ namespace ParserPlanGraph
         {
         }
 
-        public virtual List<String> GetListArchLast(string pathParse, string regionPath)
+        public virtual List<string> GetListArchLast(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchCurr(string pathParse, string regionPath)
+        public virtual List<string> GetListArchCurr(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public virtual List<String> GetListArchPrev(string pathParse, string regionPath)
+        public virtual List<string> GetListArchPrev(string pathParse, string regionPath)
         {
             var arch = new List<string>();
 
             return arch;
         }
 
-        public WorkWithFtp ClientFtp44_old()
+        protected WorkWithFtp ClientFtp44_old()
         {
             var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
             return ftpCl;
