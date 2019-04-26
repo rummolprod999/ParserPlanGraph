@@ -21,7 +21,7 @@ namespace ParserPlanGraph
 
         public override void Parsing()
         {
-            string xml = GetXml(file.ToString());
+            var xml = GetXml(file.ToString());
             Log.Logger("План cancel", file_path, xml);
         }
     }

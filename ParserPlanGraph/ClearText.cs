@@ -4,7 +4,7 @@
     {
         public static string ClearString(string s)
         {
-            string st = s;
+            var st = s;
             st = st.Replace("ns2:", "");
             st = st.Replace("oos:", "");
             st = st.Replace("", "");

@@ -24,13 +24,13 @@ namespace ParserPlanGraph
 
         public DataTable GetRegions()
         {
-            string reg = "SELECT * FROM region";
+            var reg = "SELECT * FROM region";
             DataTable dt;
-            using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+            using (var connect = ConnectToDb.GetDBConnection())
             {
                 connect.Open();
-                MySqlDataAdapter adapter = new MySqlDataAdapter(reg, connect);
-                DataSet ds = new DataSet();
+                var adapter = new MySqlDataAdapter(reg, connect);
+                var ds = new DataSet();
                 adapter.Fill(ds);
                 dt = ds.Tables[0];
             }
@@ -43,20 +43,20 @@ namespace ParserPlanGraph
 
         public string GetArch44(string Arch, string PathParse)
         {
-            string file = "";
-            int count = 1;
+            var file = "";
+            var count = 1;
             while (true)
             {
                 try
                 {
                     /*string FileOnServer = $"{PathParse}/{Arch}";*/
-                    string FileOnServer = $"{Arch}";
+                    var FileOnServer = $"{Arch}";
                     file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{Arch}";
                     /*FtpClient ftp = ClientFtp44();
                     ftp.SetWorkingDirectory(PathParse);
                     ftp.DownloadFile(file, FileOnServer);
                     ftp.Disconnect();*/
-                    using (Ftp client = new Ftp())
+                    using (var client = new Ftp())
                     {
                         client.Connect("ftp.zakupki.gov.ru");    // or ConnectSSL for SSL
                         client.Login("free", "free");
@@ -87,7 +87,7 @@ namespace ParserPlanGraph
 
         public FtpClient ClientFtp44()
         {
-            FtpClient client = new FtpClient("ftp://ftp.zakupki.gov.ru", "free", "free");
+            var client = new FtpClient("ftp://ftp.zakupki.gov.ru", "free", "free");
             client.Connect();
             return client;
         }
@@ -98,27 +98,27 @@ namespace ParserPlanGraph
 
         public virtual List<String> GetListArchLast(string PathParse, string RegionPath)
         {
-            List<String> arch = new List<string>();
+            var arch = new List<string>();
 
             return arch;
         }
 
         public virtual List<String> GetListArchCurr(string PathParse, string RegionPath)
         {
-            List<String> arch = new List<string>();
+            var arch = new List<string>();
 
             return arch;
         }
 
         public virtual List<String> GetListArchPrev(string PathParse, string RegionPath)
         {
-            List<String> arch = new List<string>();
+            var arch = new List<string>();
 
             return arch;
         }
         public WorkWithFtp ClientFtp44_old()
         {
-            WorkWithFtp ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
+            var ftpCl = new WorkWithFtp("ftp://ftp.zakupki.gov.ru", "free", "free");
             return ftpCl;
         }
 

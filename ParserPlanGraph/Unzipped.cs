@@ -9,11 +9,11 @@ namespace ParserPlanGraph
     {
         public static string Unzip(string filea)
         {
-            FileInfo fileInf = new FileInfo(filea);
+            var fileInf = new FileInfo(filea);
             if (fileInf.Exists)
             {
-                int r_point = filea.LastIndexOf('.');
-                string l_dir = filea.Substring(0, r_point);
+                var r_point = filea.LastIndexOf('.');
+                var l_dir = filea.Substring(0, r_point);
                 Directory.CreateDirectory(l_dir);
                 try
                 {

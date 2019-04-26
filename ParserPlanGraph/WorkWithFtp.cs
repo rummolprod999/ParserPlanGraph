@@ -41,7 +41,7 @@ namespace ParserPlanGraph
         {
             var request = createRequest(combine(uri, source), WebRequestMethods.Ftp.DownloadFile);
 
-            byte[] buffer = new byte[bufferSize];
+            var buffer = new byte[bufferSize];
 
             using (var response = (FtpWebResponse) request.GetResponse())
             {
@@ -49,7 +49,7 @@ namespace ParserPlanGraph
                 {
                     using (var fs = new FileStream(dest, FileMode.OpenOrCreate))
                     {
-                        int readCount = stream.Read(buffer, 0, bufferSize);
+                        var readCount = stream.Read(buffer, 0, bufferSize);
 
                         while (readCount > 0)
                         {
@@ -172,7 +172,7 @@ namespace ParserPlanGraph
                 {
                     int num;
 
-                    byte[] buffer = new byte[bufferSize];
+                    var buffer = new byte[bufferSize];
 
                     while ((num = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
@@ -197,7 +197,7 @@ namespace ParserPlanGraph
                 {
                     int num;
 
-                    byte[] buffer = new byte[bufferSize];
+                    var buffer = new byte[bufferSize];
 
                     while ((num = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     {

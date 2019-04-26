@@ -8,14 +8,14 @@ namespace ParserPlanGraph
     {
         public static void Logger(params object[] parametrs)
         {
-            string s = "";
+            var s = "";
             s += DateTime.Now.ToString(CultureInfo.InvariantCulture);
-            for (int i = 0; i < parametrs.Length; i++)
+            for (var i = 0; i < parametrs.Length; i++)
             {
                 s = $"{s} {parametrs[i]}";
             }
 
-            using (StreamWriter sw = new StreamWriter(Program.FileLog, true, System.Text.Encoding.Default))
+            using (var sw = new StreamWriter(Program.FileLog, true, System.Text.Encoding.Default))
             {
                 sw.WriteLine(s);
             }

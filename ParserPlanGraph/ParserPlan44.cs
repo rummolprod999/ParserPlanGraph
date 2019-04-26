@@ -14,7 +14,7 @@ namespace ParserPlanGraph
     public class ParserPlan44 : Parser
     {
         protected DataTable DtRegion;
-        private string[] tender_plan = new[] {"tenderplan2017"};
+        private readonly string[] tender_plan = new[] {"tenderplan2017"};
         private string[] tender_plan_cancel = new[] {"cancel"};
         private string[] tender_plan_change = new[] {"change"};
 
@@ -27,9 +27,9 @@ namespace ParserPlanGraph
             DtRegion = GetRegions();
             foreach (DataRow row in DtRegion.Rows)
             {
-                List<String> arch = new List<string>();
-                string PathParse = "";
-                string RegionPath = (string) row["path"];
+                var arch = new List<string>();
+                var PathParse = "";
+                var RegionPath = (string) row["path"];
                 switch (Program.Periodparsing)
                 {
                     case TypeArguments.Last44:
@@ -61,8 +61,8 @@ namespace ParserPlanGraph
 
         public override void GetListFileArch(string Arch, string PathParse, string region, int region_id)
         {
-            string filea = "";
-            string path_unzip = "";
+            var filea = "";
+            var path_unzip = "";
             filea = GetArch44(Arch, PathParse);
             if (!String.IsNullOrEmpty(filea))
             {
@@ -71,17 +71,17 @@ namespace ParserPlanGraph
                 {
                     if (Directory.Exists(path_unzip))
                     {
-                        DirectoryInfo dirInfo = new DirectoryInfo(path_unzip);
-                        FileInfo[] filelist = dirInfo.GetFiles();
-                        List<FileInfo> arrayTenderPlan = filelist
+                        var dirInfo = new DirectoryInfo(path_unzip);
+                        var filelist = dirInfo.GetFiles();
+                        var arrayTenderPlan = filelist
                             .Where(a => tender_plan.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayTenderPlanCancel = filelist
+                        var arrayTenderPlanCancel = filelist
                             .Where(a => tender_plan_cancel.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
-                        List<FileInfo> arrayTenderPlanChange = filelist
+                        var arrayTenderPlanChange = filelist
                             .Where(a => tender_plan_change.Any(
                                 t => a.Name.ToLower().IndexOf(t, StringComparison.Ordinal) != -1))
                             .ToList();
@@ -123,26 +123,26 @@ namespace ParserPlanGraph
 
         public void ParsingXML(FileInfo f, string region, int region_id, TypeFile44 typefile)
         {
-            using (StreamReader sr = new StreamReader(f.ToString(), Encoding.Default))
+            using (var sr = new StreamReader(f.ToString(), Encoding.Default))
             {
                 var ftext = sr.ReadToEnd();
                 ftext = ClearText.ClearString(ftext);
-                XmlDocument doc = new XmlDocument();
+                var doc = new XmlDocument();
                 doc.LoadXml(ftext);
-                string jsons = JsonConvert.SerializeXmlNode(doc);
-                JObject json = JObject.Parse(jsons);
+                var jsons = JsonConvert.SerializeXmlNode(doc);
+                var json = JObject.Parse(jsons);
                 switch (typefile)
                 {
                     case TypeFile44.Plan:
-                        PlanType44 a = new PlanType44(f, region, region_id, json);
+                        var a = new PlanType44(f, region, region_id, json);
                         a.Parsing();
                         break;
                     case TypeFile44.PlanCancel:
-                        PlanTypeCancel44 b = new PlanTypeCancel44(f, region, region_id, json);
+                        var b = new PlanTypeCancel44(f, region, region_id, json);
                         b.Parsing();
                         break;
                     case TypeFile44.PlanChange:
-                        PlanTypeChange44 c = new PlanTypeChange44(f, region, region_id, json);
+                        var c = new PlanTypeChange44(f, region, region_id, json);
                         c.Parsing();
                         break;
                 }
@@ -151,11 +151,11 @@ namespace ParserPlanGraph
 
         public override List<String> GetListArchLast(string PathParse, string RegionPath)
         {
-            List<string> archtemp = new List<string>();
+            var archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
             try
             {
-                WorkWithFtp ftp = ClientFtp44_old();
+                var ftp = ClientFtp44_old();
                 ftp.ChangeWorkingDirectory(PathParse);
                 archtemp = ftp.ListDirectory();
             }
@@ -169,12 +169,12 @@ namespace ParserPlanGraph
 
         public override List<String> GetListArchCurr(string PathParse, string RegionPath)
         {
-            List<String> arch = new List<string>();
-            List<string> archtemp = new List<string>();
+            var arch = new List<string>();
+            var archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
             try
             {
-                WorkWithFtp ftp = ClientFtp44_old();
+                var ftp = ClientFtp44_old();
                 ftp.ChangeWorkingDirectory(PathParse);
                 archtemp = ftp.ListDirectory();
             }
@@ -184,22 +184,22 @@ namespace ParserPlanGraph
             }
             foreach (var a in archtemp)
             {
-                using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+                using (var connect = ConnectToDb.GetDBConnection())
                 {
                     connect.Open();
-                    string select_arch =
+                    var select_arch =
                         $"SELECT id FROM {Program.Prefix}archiv_plan_graphs WHERE arhiv = @archive";
-                    MySqlCommand cmd = new MySqlCommand(select_arch, connect);
+                    var cmd = new MySqlCommand(select_arch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", a);
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    bool res_read = reader.HasRows;
+                    var reader = cmd.ExecuteReader();
+                    var res_read = reader.HasRows;
                     reader.Close();
                     if (!res_read)
                     {
-                        string add_arch =
+                        var add_arch =
                             $"INSERT INTO {Program.Prefix}archiv_plan_graphs SET arhiv = @archive";
-                        MySqlCommand cmd1 = new MySqlCommand(add_arch, connect);
+                        var cmd1 = new MySqlCommand(add_arch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", a);
                         cmd1.ExecuteNonQuery();
@@ -212,12 +212,12 @@ namespace ParserPlanGraph
 
         public override List<String> GetListArchPrev(string PathParse, string RegionPath)
         {
-            List<String> arch = new List<string>();
-            List<string> archtemp = new List<string>();
+            var arch = new List<string>();
+            var archtemp = new List<string>();
             /*FtpClient ftp = ClientFtp44();*/
             try
             {
-                WorkWithFtp ftp = ClientFtp44_old();
+                var ftp = ClientFtp44_old();
                 ftp.ChangeWorkingDirectory(PathParse);
                 archtemp = ftp.ListDirectory();
             }
@@ -225,26 +225,26 @@ namespace ParserPlanGraph
             {
                 Log.Logger("Не могу найти директорию", PathParse);
             }
-            string serachd = $"{Program.LocalDate:yyyyMMdd}";
+            var serachd = $"{Program.LocalDate:yyyyMMdd}";
             foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
             {
-                string prev_a = $"prev_{a}";
-                using (MySqlConnection connect = ConnectToDb.GetDBConnection())
+                var prev_a = $"prev_{a}";
+                using (var connect = ConnectToDb.GetDBConnection())
                 {
                     connect.Open();
-                    string select_arch =
+                    var select_arch =
                         $"SELECT id FROM {Program.Prefix}archiv_plan_graphs WHERE arhiv = @archive";
-                    MySqlCommand cmd = new MySqlCommand(select_arch, connect);
+                    var cmd = new MySqlCommand(select_arch, connect);
                     cmd.Prepare();
                     cmd.Parameters.AddWithValue("@archive", prev_a);
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    bool res_read = reader.HasRows;
+                    var reader = cmd.ExecuteReader();
+                    var res_read = reader.HasRows;
                     reader.Close();
                     if (!res_read)
                     {
-                        string add_arch =
+                        var add_arch =
                             $"INSERT INTO {Program.Prefix}archiv_plan_graphs SET arhiv = @archive";
-                        MySqlCommand cmd1 = new MySqlCommand(add_arch, connect);
+                        var cmd1 = new MySqlCommand(add_arch, connect);
                         cmd1.Prepare();
                         cmd1.Parameters.AddWithValue("@archive", prev_a);
                         cmd1.ExecuteNonQuery();

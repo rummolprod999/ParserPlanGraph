@@ -44,7 +44,7 @@ namespace ParserPlanGraph
                 return;
             }
 
-            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
                 .CodeBase);
             if (path != null) PathProgram = path.Substring(5);
             StrArg = args[0];
@@ -74,7 +74,7 @@ namespace ParserPlanGraph
         
         private static void Init(TypeArguments arg)
         {
-            GetSettings set = new GetSettings();
+            var set = new GetSettings();
             _database = set.Database;
             _logPath44 = set.LogPathPlan44;
             _prefix = set.Prefix;
@@ -83,8 +83,8 @@ namespace ParserPlanGraph
             _tempPath44 = set.TempPathPlan44;
             _server = set.Server;
             _port = set.Port;
-            string tmp = set.Years;
-            string[] temp_years = tmp.Split(new char[] {','});
+            var tmp = set.Years;
+            var temp_years = tmp.Split(new char[] {','});
 
             foreach (var s in temp_years.Select(v => $"_{v.Trim()}"))
             {
@@ -98,7 +98,7 @@ namespace ParserPlanGraph
 
             if (Directory.Exists(TempPath))
             {
-                DirectoryInfo dirInfo = new DirectoryInfo(TempPath);
+                var dirInfo = new DirectoryInfo(TempPath);
                 dirInfo.Delete(true);
                 Directory.CreateDirectory(TempPath);
             }
@@ -117,7 +117,7 @@ namespace ParserPlanGraph
         private static void ParserPlan44(TypeArguments arg)
         {
             Log.Logger("Время начала парсинга Plan44");
-            ParserPlan44 p44 = new ParserPlan44(Periodparsing);
+            var p44 = new ParserPlan44(Periodparsing);
             p44.Parsing();
             /*ParserPlan44 p44 = new ParserPlan44(Periodparsing);
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/tenderPlan2017_2017017610000440010001_1549630.xml");
