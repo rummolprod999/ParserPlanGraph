@@ -141,6 +141,8 @@ namespace ParserPlanGraph
                         /*var c = new PlanTypeChange44(f, region, regionId, json);
                         c.Parsing();*/
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(typefile), typefile, null);
                 }
             }
         }
