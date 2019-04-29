@@ -10,7 +10,7 @@ namespace ParserPlanGraph
     {
         public static readonly DateTime LocalDate = DateTime.Now;
         public static string FileLog;
-        private static string StrArg;
+        public static string StrArg { get; private set; }
         public static TypeArguments Periodparsing;
         public static string PathProgram;
         public static int AddPlan44 = 0;
@@ -32,7 +32,7 @@ namespace ParserPlanGraph
 
         public static string TempPath { get; private set; }
 
-        public static string LogPath { get; private set; }
+        private static string LogPath { get; set; }
 
         public static void Main(string[] args)
         {

@@ -49,6 +49,7 @@ namespace ParserPlanGraph
                 {
                     using (var fs = new FileStream(dest, FileMode.OpenOrCreate))
                     {
+                        if (stream == null) return response.StatusDescription;
                         var readCount = stream.Read(buffer, 0, _bufferSize);
 
                         while (readCount > 0)
