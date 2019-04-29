@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Threading;
 using FluentFTP;
-using Limilabs.FTP.Client;
 using MySql.Data.MySqlClient;
 
 namespace ParserPlanGraph
@@ -50,21 +49,13 @@ namespace ParserPlanGraph
             {
                 try
                 {
-                    /*string FileOnServer = $"{PathParse}/{Arch}";*/
                     var fileOnServer = $"{arch}";
                     file = $"{Program.TempPath}{Path.DirectorySeparatorChar}{arch}";
-                    /*FtpClient ftp = ClientFtp44();
-                    ftp.SetWorkingDirectory(PathParse);
-                    ftp.DownloadFile(file, FileOnServer);
-                    ftp.Disconnect();*/
-                    using (var client = new Ftp())
+                    using (var ftp = ClientFtp44())
                     {
-                        client.Connect("ftp.zakupki.gov.ru"); // or ConnectSSL for SSL
-                        client.Login("free", "free");
-                        client.ChangeFolder(pathParse);
-                        client.Download(fileOnServer, file);
-
-                        client.Close();
+                        ftp.SetWorkingDirectory(pathParse);
+                        ftp.DownloadFile(file, fileOnServer);
+                        ftp.Disconnect();
                     }
 
                     if (count > 1)
