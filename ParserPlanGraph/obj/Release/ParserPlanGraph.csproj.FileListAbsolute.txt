@@ -1,13 +1,12 @@
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/ParserPlanGraph.exe.config
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/ParserPlanGraph.exe
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/ParserPlanGraph.pdb
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/BouncyCastle.Crypto.dll
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/FluentFTP.dll
-/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Ftp.dll
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Google.Protobuf.dll
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/MySql.Data.dll
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Newtonsoft.Json.dll
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/FluentFTP.xml
-/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Ftp.xml
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Google.Protobuf.pdb
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Google.Protobuf.xml
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/MySql.Data.xml
