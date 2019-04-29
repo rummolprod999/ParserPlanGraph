@@ -78,7 +78,7 @@ namespace ParserPlanGraph
                     if (versionNumber >= max)
                     {
                         var delAll =
-                            $"DELETE tp, ta, tpos, tpr FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod LEFT JOIN tender_plan_products AS trpod ON tprod.id_tender_plan_position = tpos.id WHERE id_region = @id_region AND plan_number = @plan_number";
+                            $"DELETE tp, ta, tpos, tpr, t_prod FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod LEFT JOIN  {Program.Prefix}tender_plan_products AS t_prod ON t_prod.id_tender_plan_position = tpos.id WHERE tp.id_region = @id_region AND tp.plan_number = @plan_number";
                         var cmd00 = new MySqlCommand(delAll, connect);
                         cmd00.Prepare();
                         cmd00.Parameters.AddWithValue("@id_region", RegionId);
