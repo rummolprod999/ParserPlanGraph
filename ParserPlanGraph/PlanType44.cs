@@ -74,7 +74,7 @@ namespace ParserPlanGraph
                     cmd0.Prepare();
                     cmd0.Parameters.AddWithValue("@id_region", RegionId);
                     cmd0.Parameters.AddWithValue("@plan_number", planNumber);
-                    var max = (int) cmd0.ExecuteScalar();
+                    var max = (long) cmd0.ExecuteScalar();
                     if (versionNumber >= max)
                     {
                         var delAll =
