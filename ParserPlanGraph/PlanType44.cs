@@ -69,7 +69,7 @@ namespace ParserPlanGraph
 
                     reader.Close();
                     var maxVerNumber =
-                        $"SELECT MAX(num_version) FROM {Program.Prefix}tender_plan WHERE id_region = @id_region AND plan_number = @plan_number";
+                        $"SELECT IFNULL(MAX(num_version), 0) FROM {Program.Prefix}tender_plan WHERE id_region = @id_region AND plan_number = @plan_number";
                     var cmd0 = new MySqlCommand(maxVerNumber, connect);
                     cmd0.Prepare();
                     cmd0.Parameters.AddWithValue("@id_region", RegionId);
@@ -458,6 +458,63 @@ namespace ParserPlanGraph
                                 cmd14.Parameters.AddWithValue("@OKPD2_name", okpd2Name);
                                 cmd14.Parameters.AddWithValue("@OKEI_code", okeiCode);
                                 cmd14.Parameters.AddWithValue("@OKEI_name", okeiName);
+                                cmd14.Parameters.AddWithValue("@prod_description", posDescription);
+                                cmd14.Parameters.AddWithValue("@products_quantity_total", productQuantityTotal);
+                                cmd14.Parameters.AddWithValue("@products_quantity_current_year",
+                                    productQuantityCurrentYear);
+                                cmd14.Parameters.AddWithValue("@product_sum_total", productSumTotal);
+                                cmd14.Parameters.AddWithValue("@product_sum_current_year", productSumCurrentYear);
+                                cmd14.ExecuteNonQuery();
+                            }
+                        }
+
+                        var pills = GetElements(pos, "KTRUInfo.drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
+                        foreach (var pl in pills)
+                        {
+                            var drugInfo = pl.SelectToken("objectInfoUsingReferenceInfo");
+                            if (drugInfo is null || drugInfo.Type != JTokenType.Null)
+                            {
+                                drugInfo = pl.SelectToken("objectInfoUsingTextForm");
+                            }
+
+                            if (drugInfo is null || drugInfo.Type != JTokenType.Null)
+                            {
+                                continue;
+                            }
+
+                            var dInf = GetElements(drugInfo, "drugsInfo.drugInfo");
+                            foreach (var di in dInf)
+                            {
+                                var posDescription1 = ((string) di.SelectToken("MNNInfo.MNNName") ?? "")
+                                    .Trim();
+                                var posDescription2 = ((string) di.SelectToken("tradeInfo.positionTradeNam") ?? "")
+                                    .Trim();
+                                var posDescription3 =
+                                    ((string) di.SelectToken("medicamentalFormInfo.medicamentalFormName") ?? "")
+                                    .Trim();
+                                var posDescription4 = ((string) di.SelectToken("dosageInfo.dosageGRLSValue") ?? "")
+                                    .Trim();
+                                var posDescription5 =
+                                    ((string) di.SelectToken("packagingInfo.packaging1Quantity") ?? "")
+                                    .Trim();
+                                var posDescription =
+                                    $"{posDescription1} {posDescription2} {posDescription3} {posDescription4} {posDescription5}"
+                                        .Trim();
+                                var productQuantityTotal =
+                                    (decimal?) di.SelectToken("drugQuantityInfo.total") ?? 0.0m;
+                                var productQuantityCurrentYear =
+                                    (decimal?) di.SelectToken("drugQuantityInfo.currentYear") ?? 0.0m;
+                                var productSumTotal =
+                                    (decimal?) pl.SelectToken("drugSumPaymentsInfo.total") ?? 0.0m;
+                                var productSumCurrentYear =
+                                    (decimal?) pl.SelectToken("drugSumPaymentsInfo.currentYear") ?? 0.0m;
+                                var cmd14 = new MySqlCommand(insertProduct, connect);
+                                cmd14.Prepare();
+                                cmd14.Parameters.AddWithValue("@id_tender_plan_position", idProd);
+                                cmd14.Parameters.AddWithValue("@OKPD2_code", "");
+                                cmd14.Parameters.AddWithValue("@OKPD2_name", "");
+                                cmd14.Parameters.AddWithValue("@OKEI_code", "");
+                                cmd14.Parameters.AddWithValue("@OKEI_name", "");
                                 cmd14.Parameters.AddWithValue("@prod_description", posDescription);
                                 cmd14.Parameters.AddWithValue("@products_quantity_total", productQuantityTotal);
                                 cmd14.Parameters.AddWithValue("@products_quantity_current_year",
