@@ -408,9 +408,10 @@ namespace ParserPlanGraph
                         cmd11.ExecuteNonQuery();
                         var idProd = (int) cmd11.LastInsertedId;
                         var products = GetElements(pos, "KTRUInfo.productsSpecification.product");
+                        var pills = GetElements(pos, "KTRUInfo.drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
                         var insertProduct =
                             $"INSERT INTO {Program.Prefix}tender_plan_products SET id_tender_plan_position = @id_tender_plan_position, OKPD2_code = @OKPD2_code, OKPD2_name = @OKPD2_name, OKEI_code = @OKEI_code, OKEI_name = @OKEI_name, prod_description = @prod_description, products_quantity_total = @products_quantity_total, products_quantity_current_year = @products_quantity_current_year, product_sum_total = @product_sum_total, product_sum_current_year = @product_sum_current_year";
-                        if (products.Count == 0)
+                        if (products.Count == 0 && pills.Count == 0)
                         {
                             var okpd2Code =
                                 ((string) pos.SelectToken("purchaseObjectInfo.OKPD2Info.OKPD2.code") ?? "").Trim();
@@ -442,7 +443,7 @@ namespace ParserPlanGraph
                             cmd14.Parameters.AddWithValue("@product_sum_current_year", 0.0m);
                             cmd14.ExecuteNonQuery();
                         }
-                        else
+                        else if (products.Count != 0)
                         {
                             foreach (var p in products)
                             {
@@ -479,7 +480,7 @@ namespace ParserPlanGraph
                             }
                         }
 
-                        var pills = GetElements(pos, "KTRUInfo.drugPurchaseObjectsInfo.drugPurchaseObjectInfo");
+                        
                         foreach (var pl in pills)
                         {
                             var drugInfo = pl.SelectToken("objectInfoUsingReferenceInfo");
