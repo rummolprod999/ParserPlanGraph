@@ -74,7 +74,18 @@ namespace ParserPlanGraph
                     cmd0.Prepare();
                     cmd0.Parameters.AddWithValue("@id_region", RegionId);
                     cmd0.Parameters.AddWithValue("@plan_number", planNumber);
-                    var max = (long) cmd0.ExecuteScalar();
+                    int max;
+                    switch (cmd0.ExecuteScalar())
+                    {
+                        case int i:
+                            max = i;
+                            break;
+                        case long l:
+                            max = (int) l;
+                            break;
+                        default:
+                            throw  new ArgumentException("type object not int and not long", nameof(max));
+                    }
                     if (versionNumber >= max)
                     {
                         var delAll =
@@ -472,12 +483,12 @@ namespace ParserPlanGraph
                         foreach (var pl in pills)
                         {
                             var drugInfo = pl.SelectToken("objectInfoUsingReferenceInfo");
-                            if (drugInfo is null || drugInfo.Type != JTokenType.Null)
+                            if (drugInfo is null || drugInfo.Type == JTokenType.Null)
                             {
                                 drugInfo = pl.SelectToken("objectInfoUsingTextForm");
                             }
 
-                            if (drugInfo is null || drugInfo.Type != JTokenType.Null)
+                            if (drugInfo is null || drugInfo.Type == JTokenType.Null)
                             {
                                 continue;
                             }
