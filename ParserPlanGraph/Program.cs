@@ -14,6 +14,7 @@ namespace ParserPlanGraph
         public static TypeArguments Periodparsing;
         public static string PathProgram;
         public static int AddPlan44 = 0;
+        public static int UpdatePlan44 = 0;
         public static int AddPlanCancel44 = 0;
         public static int AddPlanChange44 = 0;
         public static string Database { get; private set; }
@@ -125,6 +126,7 @@ namespace ParserPlanGraph
             FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/tenderPlan2017_2017017610000440010001_1549630.xml");
             p44.ParsingXML(f, "moskow", 50, TypeFile44.Plan);*/
             Log.Logger("Добавили Plan44", AddPlan44);
+            Log.Logger("Обновили Plan44", UpdatePlan44);
             Log.Logger("Добавили PlanCancel44", AddPlanCancel44);
             Log.Logger("Добавили PlanChange44", AddPlanChange44);
             Log.Logger("Время окончания парсинга Plan44");

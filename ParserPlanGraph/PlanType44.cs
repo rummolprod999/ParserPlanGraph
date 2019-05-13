@@ -20,12 +20,21 @@ namespace ParserPlanGraph
                 else
                     Log.Logger("Не удалось добавить Plan44", FilePath);
             };
+            UpdatePlan44 += delegate(int d)
+            {
+                if (d > 0)
+                    Program.UpdatePlan44++;
+                else
+                    Log.Logger("Не удалось обновить Plan44", FilePath);
+            };
         }
 
         public event Action<int> AddPlan44;
+        public event Action<int> UpdatePlan44;
 
         public override void Parsing()
         {
+            var update = false;
             var xml = GetXml(File.ToString());
             var root = (JObject) P.SelectToken("export");
             var firstOrDefault = root.Properties().FirstOrDefault(pr => pr.Name.Contains("tender"));
@@ -84,10 +93,15 @@ namespace ParserPlanGraph
                             max = (int) l;
                             break;
                         default:
-                            throw  new ArgumentException("type object not int and not long", nameof(max));
+                            throw new ArgumentException("type object not int and not long", nameof(max));
                     }
+
                     if (versionNumber >= max)
                     {
+                        if (max != 0)
+                        {
+                            update = true;
+                        }
                         var delAll =
                             $"DELETE tp, ta, tpos, tpr, t_prod FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod LEFT JOIN  {Program.Prefix}tender_plan_products AS t_prod ON t_prod.id_tender_plan_position = tpos.id WHERE tp.id_region = @id_region AND tp.plan_number = @plan_number";
                         var cmd00 = new MySqlCommand(delAll, connect);
@@ -303,7 +317,15 @@ namespace ParserPlanGraph
                     cmd8.Parameters.AddWithValue("@xml", xml);
                     var resPlan = cmd8.ExecuteNonQuery();
                     var idPlan = (int) cmd8.LastInsertedId;
-                    AddPlan44?.Invoke(resPlan);
+                    if (update)
+                    {
+                        UpdatePlan44?.Invoke(resPlan);
+                    }
+                    else
+                    {
+                        AddPlan44?.Invoke(resPlan);
+                    }
+
                     var positions = GetElements(plan, "positions.position");
                     foreach (var pos in positions)
                     {
@@ -480,7 +502,7 @@ namespace ParserPlanGraph
                             }
                         }
 
-                        
+
                         foreach (var pl in pills)
                         {
                             var drugInfo = pl.SelectToken("objectInfoUsingReferenceInfo");
