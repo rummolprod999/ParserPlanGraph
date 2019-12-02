@@ -102,6 +102,7 @@ namespace ParserPlanGraph
                         {
                             update = true;
                         }
+
                         var delAll =
                             $"DELETE tp, ta, tpos, tpr, t_prod FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod LEFT JOIN  {Program.Prefix}tender_plan_products AS t_prod ON t_prod.id_tender_plan_position = tpos.id WHERE tp.id_region = @id_region AND tp.plan_number = @plan_number";
                         var cmd00 = new MySqlCommand(delAll, connect);
@@ -289,7 +290,7 @@ namespace ParserPlanGraph
                         ((string) plan.SelectToken("totals.financeSupport.financeSupportTotal.currentYear") ?? "")
                         .Trim();
                     var insertPlan =
-                        $"INSERT INTO {Program.Prefix}tender_plan SET id_xml = @id_xml, plan_number = @plan_number, num_version = @num_version, id_region = @id_region, purchase_plan_number = @purchase_plan_number, year = @year, create_date = @create_date, confirm_date = @confirm_date, publish_date = @publish_date, id_customer = @id_customer, id_owner = @id_owner, print_form = @print_form, cancel = @cancel, sum_pushases_small_business_total = @sum_pushases_small_business_total, sum_pushases_small_business_current_year = @sum_pushases_small_business_current_year, sum_pushases_request_total = @sum_pushases_request_total, sum_pushases_request_current_year = @sum_pushases_request_current_year, finance_support_total = @finance_support_total, finance_support_current_year = @finance_support_current_year, xml = @xml";
+                        $"INSERT INTO {Program.Prefix}tender_plan SET id_xml = @id_xml, plan_number = @plan_number, num_version = @num_version, id_region = @id_region, purchase_plan_number = @purchase_plan_number, year = @year, create_date = @create_date, confirm_date = @confirm_date, publish_date = @publish_date, id_customer = @id_customer, id_owner = @id_owner, print_form = @print_form, cancel = @cancel, sum_pushases_small_business_total = @sum_pushases_small_business_total, sum_pushases_small_business_current_year = @sum_pushases_small_business_current_year, sum_pushases_request_total = @sum_pushases_request_total, sum_pushases_request_current_year = @sum_pushases_request_current_year, finance_support_total = @finance_support_total, finance_support_current_year = @finance_support_current_year, xml = @xml, plan_specification = @plan_specification";
                     var cmd8 = new MySqlCommand(insertPlan, connect);
                     cmd8.Prepare();
                     cmd8.Parameters.AddWithValue("@id_xml", idXml);
@@ -315,6 +316,7 @@ namespace ParserPlanGraph
                     cmd8.Parameters.AddWithValue("@finance_support_total", financeSupportTotal);
                     cmd8.Parameters.AddWithValue("@finance_support_current_year", financeSupportCurrentYear);
                     cmd8.Parameters.AddWithValue("@xml", xml);
+                    cmd8.Parameters.AddWithValue("@plan_specification", 2017);
                     var resPlan = cmd8.ExecuteNonQuery();
                     var idPlan = (int) cmd8.LastInsertedId;
                     if (update)
