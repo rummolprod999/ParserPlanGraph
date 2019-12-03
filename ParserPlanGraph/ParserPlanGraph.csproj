@@ -90,6 +90,7 @@
     <Compile Include="ParserPlan442020.cs" />
     <Compile Include="Plan.cs" />
     <Compile Include="PlanType44.cs" />
+    <Compile Include="PlanType442020.cs" />
     <Compile Include="PlanTypeCancel44.cs" />
     <Compile Include="PlanTypeChange44.cs" />
     <Compile Include="Program.cs" />

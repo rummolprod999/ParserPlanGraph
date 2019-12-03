@@ -22,6 +22,7 @@
         <e p="ParserPlanGraph.csproj" t="IncludeRecursive" />
         <e p="Plan.cs" t="Include" />
         <e p="PlanType44.cs" t="Include" />
+        <e p="PlanType442020.cs" t="Include" />
         <e p="PlanTypeCancel44.cs" t="Include" />
         <e p="PlanTypeChange44.cs" t="Include" />
         <e p="Program.cs" t="Include" />

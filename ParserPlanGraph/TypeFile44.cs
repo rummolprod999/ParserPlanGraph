@@ -4,7 +4,10 @@
     {
         Plan,
         PlanCancel,
-        PlanChange
+        PlanChange,
+        Plan2020,
+        PlanCancel2020,
+        PlanChange2020
         
     }
 }
