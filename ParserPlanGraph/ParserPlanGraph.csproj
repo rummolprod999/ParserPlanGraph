@@ -87,6 +87,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParserPlan44.cs" />
+    <Compile Include="ParserPlan442020.cs" />
     <Compile Include="Plan.cs" />
     <Compile Include="PlanType44.cs" />
     <Compile Include="PlanTypeCancel44.cs" />

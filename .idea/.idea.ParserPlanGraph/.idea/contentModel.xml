@@ -18,6 +18,7 @@
         <e p="Log.cs" t="Include" />
         <e p="Parser.cs" t="Include" />
         <e p="ParserPlan44.cs" t="Include" />
+        <e p="ParserPlan442020.cs" t="Include" />
         <e p="ParserPlanGraph.csproj" t="IncludeRecursive" />
         <e p="Plan.cs" t="Include" />
         <e p="PlanType44.cs" t="Include" />

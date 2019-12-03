@@ -17,6 +17,10 @@ namespace ParserPlanGraph
         public static int UpdatePlan44 = 0;
         public static int AddPlanCancel44 = 0;
         public static int AddPlanChange44 = 0;
+        public static int AddPlan44_2020 = 0;
+        public static int UpdatePlan44_2020 = 0;
+        public static int AddPlanCancel44_2020 = 0;
+        public static int AddPlanChange44_2020 = 0;
         public static string Database { get; private set; }
 
         public static string Prefix { get; private set; }
@@ -65,9 +69,24 @@ namespace ParserPlanGraph
                     Init(Periodparsing);
                     ParserPlan44();
                     break;
+                case "curr442020":
+                    Periodparsing = TypeArguments.Curr442020;
+                    Init(Periodparsing);
+                    ParserPlan442020();
+                    break;
+                case "prev442020":
+                    Periodparsing = TypeArguments.Prev442020;
+                    Init(Periodparsing);
+                    ParserPlan442020();
+                    break;
+                case "last442020":
+                    Periodparsing = TypeArguments.Last442020;
+                    Init(Periodparsing);
+                    ParserPlan442020();
+                    break;
                 default:
                     Console.WriteLine(
-                        "Неправильно указан аргумент, используйте last44, prev44, curr44");
+                        "Неправильно указан аргумент, используйте last44, prev44, curr44, last442020, prev442020, curr442020");
                     break;
             }
         }
@@ -113,7 +132,8 @@ namespace ParserPlanGraph
                 Directory.CreateDirectory(LogPath);
             }
 
-            if (arg == TypeArguments.Curr44 || arg == TypeArguments.Last44 || arg == TypeArguments.Prev44)
+            if (arg == TypeArguments.Curr44 || arg == TypeArguments.Last44 || arg == TypeArguments.Prev44 ||
+                arg == TypeArguments.Curr442020 || arg == TypeArguments.Prev442020 || arg == TypeArguments.Last442020)
                 FileLog = $"{LogPath}{Path.DirectorySeparatorChar}Plan44_{LocalDate:dd_MM_yyyy}.log";
         }
 
@@ -130,6 +150,21 @@ namespace ParserPlanGraph
             Log.Logger("Добавили PlanCancel44", AddPlanCancel44);
             Log.Logger("Добавили PlanChange44", AddPlanChange44);
             Log.Logger("Время окончания парсинга Plan44");
+        }
+
+        private static void ParserPlan442020()
+        {
+            Log.Logger("Время начала парсинга Plan442020");
+            var p44 = new ParserPlan442020(Periodparsing);
+            p44.Parsing();
+            /*ParserPlan44 p44 = new ParserPlan44(Periodparsing);
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/tenderPlan2017_2017017610000440010001_1549630.xml");
+            p44.ParsingXML(f, "moskow", 50, TypeFile44.Plan);*/
+            Log.Logger("Добавили Plan44_2020", AddPlan44_2020);
+            Log.Logger("Обновили Plan44_2020", UpdatePlan44_2020);
+            Log.Logger("Добавили PlanCancel44_2020", AddPlanCancel44_2020);
+            Log.Logger("Добавили PlanChange44_2020", AddPlanChange44_2020);
+            Log.Logger("Время окончания парсинга Plan442020");
         }
     }
 }
