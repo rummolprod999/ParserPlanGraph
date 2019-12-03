@@ -104,7 +104,7 @@ namespace ParserPlanGraph
                         }
 
                         var delAll =
-                            $"DELETE tp, ta, tpos, tpr, t_prod FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod LEFT JOIN  {Program.Prefix}tender_plan_products AS t_prod ON t_prod.id_tender_plan_position = tpos.id WHERE tp.id_region = @id_region AND tp.plan_number = @plan_number";
+                            $"DELETE tp, ta, tpos, tpr, t_prod, ts, tsp FROM {Program.Prefix}tender_plan AS tp LEFT JOIN {Program.Prefix}tender_plan_attach AS ta ON tp.id = ta.id_plan LEFT JOIN {Program.Prefix}tender_plan_position AS tpos ON tp.id = tpos.id_plan LEFT JOIN {Program.Prefix}tender_plan_pref_rec AS tpr ON tpos.id = tpr.id_plan_prod LEFT JOIN  {Program.Prefix}tender_plan_products AS t_prod ON t_prod.id_tender_plan_position = tpos.id LEFT JOIN {Program.Prefix}tender_plan_special_purchases AS tsp ON tsp.id_plan = tp.id LEFT JOIN {Program.Prefix}tender_plan_special_purchase AS ts ON ts.id_plan_special_purchases = tsp.id WHERE tp.id_region = @id_region AND tp.plan_number = @plan_number";
                         var cmd00 = new MySqlCommand(delAll, connect);
                         cmd00.Prepare();
                         cmd00.Parameters.AddWithValue("@id_region", RegionId);
@@ -579,6 +579,68 @@ namespace ParserPlanGraph
                             cmd12.Parameters.AddWithValue("@name", name);
                             cmd12.Parameters.AddWithValue("@add_info", addInfo);
                             cmd12.ExecuteNonQuery();
+                        }
+                    }
+
+                    var specPositions = GetElements(plan, "specialPurchases.specialPurchase");
+                    foreach (var spec in specPositions)
+                    {
+                        var typeCode =
+                            ((string) spec.SelectToken("type.code") ?? "")
+                            .Trim();
+                        var typeName =
+                            ((string) spec.SelectToken("type.name") ?? "")
+                            .Trim();
+                        var financeTotal =
+                            ((string) spec.SelectToken("yearFinanceInfo.total") ?? "").Trim();
+                        var financeTotalCurrentYear =
+                            ((string) spec.SelectToken("yearFinanceInfo.currentYear") ?? "").Trim();
+                        var insertSpecPositions =
+                            $"INSERT INTO {Program.Prefix}tender_plan_special_purchases SET id_plan = @id_plan, type_code = @type_code, type_name = @type_name, finance_total = @finance_total, finance_total_current_year = @finance_total_current_year";
+                        var cmd12 = new MySqlCommand(insertSpecPositions, connect);
+                        cmd12.Prepare();
+                        cmd12.Parameters.AddWithValue("@id_plan", idPlan);
+                        cmd12.Parameters.AddWithValue("@type_code", typeCode);
+                        cmd12.Parameters.AddWithValue("@type_name", typeName);
+                        cmd12.Parameters.AddWithValue("@finance_total", financeTotal);
+                        cmd12.Parameters.AddWithValue("@finance_total_current_year", financeTotalCurrentYear);
+                        cmd12.ExecuteNonQuery();
+                        var idSpecPos = (int) cmd12.LastInsertedId;
+                        var specPos = GetElements(spec, "purchases.purchase");
+                        foreach (var spp in specPos)
+                        {
+                            var posNum =
+                                ((string) spp.SelectToken("positionNumber") ?? "")
+                                .Trim();
+                            var ikz =
+                                ((string) spp.SelectToken("IKZ") ?? "")
+                                .Trim();
+                            var pubYear =
+                                ((string) spp.SelectToken("publishYear") ?? "")
+                                .Trim();
+                            var purNum =
+                                ((string) spp.SelectToken("purchaseNumber") ?? "")
+                                .Trim();
+                            var kvrName =
+                                ((string) spp.SelectToken("KVRInfo.KVR.name") ?? "")
+                                .Trim();
+                            var financeTotalP =
+                                ((string) spp.SelectToken("yearFinanceInfo.total") ?? "").Trim();
+                            var financeTotalCurrentYearP =
+                                ((string) spp.SelectToken("yearFinanceInfo.currentYear") ?? "").Trim();
+                            var insertSpecPosition =
+                                $"INSERT INTO {Program.Prefix}tender_plan_special_purchase SET id_plan_special_purchases = @id_plan_special_purchases, position_number = @position_number, ikz = @ikz, publish_year = @publish_year, purchase_number = @purchase_number, kvr_name = @kvr_name , finance_total_current_year = @finance_total_current_year, finance_total = @finance_total";
+                            var cmd13 = new MySqlCommand(insertSpecPosition, connect);
+                            cmd13.Prepare();
+                            cmd13.Parameters.AddWithValue("@id_plan_special_purchases", idSpecPos);
+                            cmd13.Parameters.AddWithValue("@position_number", posNum);
+                            cmd13.Parameters.AddWithValue("@ikz", ikz);
+                            cmd13.Parameters.AddWithValue("@publish_year", pubYear);
+                            cmd13.Parameters.AddWithValue("@purchase_number", purNum);
+                            cmd13.Parameters.AddWithValue("@kvr_name", kvrName);
+                            cmd13.Parameters.AddWithValue("@finance_total_current_year", financeTotalCurrentYearP);
+                            cmd13.Parameters.AddWithValue("@finance_total", financeTotalP);
+                            cmd13.ExecuteNonQuery();
                         }
                     }
 

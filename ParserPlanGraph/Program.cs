@@ -143,8 +143,8 @@ namespace ParserPlanGraph
             var p44 = new ParserPlan44(Periodparsing);
             p44.Parsing();
             /*ParserPlan44 p44 = new ParserPlan44(Periodparsing);
-            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/tenderPlan2017_2017017610000440010001_1549630.xml");
-            p44.ParsingXML(f, "moskow", 50, TypeFile44.Plan);*/
+            FileInfo f = new FileInfo("/home/alex/Рабочий стол/parser/tenderPlan2017_2019015230000960010001_9188881.xml");
+            p44.ParsingXml(f, "moskow", 50, TypeFile44.Plan);*/
             Log.Logger("Добавили Plan44", AddPlan44);
             Log.Logger("Обновили Plan44", UpdatePlan44);
             Log.Logger("Добавили PlanCancel44", AddPlanCancel44);
