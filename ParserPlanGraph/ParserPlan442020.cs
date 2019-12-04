@@ -223,8 +223,8 @@ namespace ParserPlanGraph
                 Log.Logger("Не могу найти директорию", pathParse);
             }
 
-            //var serachd = $"{Program.LocalDate:yyyyMMdd}";
-            var serachd = $"{Program.LocalDate:yyyy}"; //TODO change it
+            var serachd = $"{Program.LocalDate:yyyyMMdd}";
+            //var serachd = $"{Program.LocalDate:yyyy}"; //TODO change it
             foreach (var a in archtemp.Where(a => a.IndexOf(serachd, StringComparison.Ordinal) != -1))
             {
                 var prevA = $"prev_{a}";
