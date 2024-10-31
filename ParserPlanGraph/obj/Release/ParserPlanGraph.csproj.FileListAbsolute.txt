@@ -11,7 +11,8 @@
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Google.Protobuf.xml
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/MySql.Data.xml
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/bin/Release/Newtonsoft.Json.xml
-/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.csprojAssemblyReference.cache
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.csproj.CopyComplete
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.exe
 /home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.pdb
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.csproj.AssemblyReference.cache
+/home/alex/RiderProjects/ParserPlanGraph/ParserPlanGraph/obj/Release/ParserPlanGraph.csproj.CoreCompileInputs.cache
